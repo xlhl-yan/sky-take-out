@@ -1,6 +1,7 @@
 package com.xlhl.sky.controller.admin;
 
 import com.xlhl.sky.constant.JwtClaimsConstant;
+import com.xlhl.sky.dto.EmployeeDTO;
 import com.xlhl.sky.dto.EmployeeLoginDTO;
 import com.xlhl.sky.entity.Employee;
 import com.xlhl.sky.properties.JwtProperties;
@@ -76,4 +77,18 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /**
+     * 新增员工
+     *
+     * @param employee
+     * @return
+     */
+    @PostMapping
+    @ApiOperation(value = "新增员工")
+    public Result<String> save(@RequestBody EmployeeDTO employee) throws Exception {
+        log.info("当前线程的id==>{}", Thread.currentThread().getId());
+        log.info("新增员工:{}", employee);
+        employeeService.save(employee);
+        return Result.success();
+    }
 }

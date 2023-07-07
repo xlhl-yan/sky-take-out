@@ -1,11 +1,13 @@
 package com.xlhl.sky.result;
 
+import com.xlhl.sky.constant.StatusConstant;
 import lombok.Data;
 
 import java.io.Serializable;
 
 /**
  * 后端统一返回结果
+ *
  * @param <T>
  */
 @Data
@@ -17,14 +19,14 @@ public class Result<T> implements Serializable {
 
     public static <T> Result<T> success() {
         Result<T> result = new Result<T>();
-        result.code = 1;
+        result.code = StatusConstant.ENABLE;
         return result;
     }
 
     public static <T> Result<T> success(T object) {
         Result<T> result = new Result<T>();
         result.data = object;
-        result.code = 1;
+        result.code = StatusConstant.ENABLE;
         return result;
     }
 
