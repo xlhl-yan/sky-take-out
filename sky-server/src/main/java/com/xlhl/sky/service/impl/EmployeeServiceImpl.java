@@ -1,16 +1,21 @@
 package com.xlhl.sky.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.xlhl.sky.constant.MessageConstant;
 import com.xlhl.sky.constant.PasswordConstant;
 import com.xlhl.sky.constant.StatusConstant;
 import com.xlhl.sky.context.BaseContext;
 import com.xlhl.sky.dto.EmployeeDTO;
 import com.xlhl.sky.dto.EmployeeLoginDTO;
+import com.xlhl.sky.dto.EmployeePageQueryDTO;
 import com.xlhl.sky.entity.Employee;
 import com.xlhl.sky.exception.AccountLockedException;
 import com.xlhl.sky.exception.AccountNotFoundException;
 import com.xlhl.sky.exception.PasswordErrorException;
 import com.xlhl.sky.mapper.EmployeeMapper;
+import com.xlhl.sky.result.PageResult;
 import com.xlhl.sky.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +24,7 @@ import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -89,6 +95,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //设置默认密码
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
+
         //设置创建时间
         LocalDateTime dateTime = LocalDateTime.now();
         employee.setCreateTime(dateTime);
@@ -102,6 +109,25 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //插入新员工数据
         employeeMapper.insert(employee);
+    }
+
+    @Override
+    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+        //参数校验
+        if (employeePageQueryDTO.getPage() <= 0 || employeePageQueryDTO.getPage() > Integer.MAX_VALUE) {
+            employeePageQueryDTO.setPage(1);
+        }
+
+        //开始分页查询插件
+        PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
+        Page<Employee> page = employeeMapper.pageQueryLikeName(employeePageQueryDTO);
+
+        //封装数据
+        long total = page.getTotal();
+        List<Employee> result = page.getResult();
+
+        return new PageResult(total, result);
+
     }
 
 }

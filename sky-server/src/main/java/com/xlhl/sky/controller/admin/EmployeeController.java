@@ -3,8 +3,10 @@ package com.xlhl.sky.controller.admin;
 import com.xlhl.sky.constant.JwtClaimsConstant;
 import com.xlhl.sky.dto.EmployeeDTO;
 import com.xlhl.sky.dto.EmployeeLoginDTO;
+import com.xlhl.sky.dto.EmployeePageQueryDTO;
 import com.xlhl.sky.entity.Employee;
 import com.xlhl.sky.properties.JwtProperties;
+import com.xlhl.sky.result.PageResult;
 import com.xlhl.sky.result.Result;
 import com.xlhl.sky.service.EmployeeService;
 import com.xlhl.sky.utils.JwtUtil;
@@ -12,10 +14,7 @@ import com.xlhl.sky.vo.EmployeeLoginVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -88,7 +87,23 @@ public class EmployeeController {
     public Result<String> save(@RequestBody EmployeeDTO employee) throws Exception {
         log.info("当前线程的id==>{}", Thread.currentThread().getId());
         log.info("新增员工:{}", employee);
+
         employeeService.save(employee);
         return Result.success();
+    }
+
+    /**
+     * 分页查询所有员工信息 可指定名称
+     *
+     * @param employeePageQueryDTO
+     * @return
+     */
+    @GetMapping("/page")
+    @ApiOperation(value = "分页查询所有员工信息")
+    public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO) {
+        log.info("收到的参数是:{}", employeePageQueryDTO);
+
+        PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
+        return Result.success(pageResult);
     }
 }
