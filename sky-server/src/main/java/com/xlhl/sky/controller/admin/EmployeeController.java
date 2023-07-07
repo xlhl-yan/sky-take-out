@@ -7,14 +7,16 @@ import com.xlhl.sky.properties.JwtProperties;
 import com.xlhl.sky.result.Result;
 import com.xlhl.sky.service.EmployeeService;
 import com.xlhl.sky.utils.JwtUtil;
-import com.xlhl.sky.vo.*;
+import com.xlhl.sky.vo.EmployeeLoginVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,11 +26,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin/employee")
 @Slf4j
+@Api(tags = "员工相关接口")
 public class EmployeeController {
 
-    @Autowired
+    @Resource
     private EmployeeService employeeService;
-    @Autowired
+    @Resource
     private JwtProperties jwtProperties;
 
     /**
@@ -38,6 +41,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/login")
+    @ApiOperation(value = "员工登录功能")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
         log.info("员工登录：{}", employeeLoginDTO);
 
@@ -67,6 +71,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/logout")
+    @ApiOperation(value = "员工退出登录")
     public Result<String> logout() {
         return Result.success();
     }

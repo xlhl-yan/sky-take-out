@@ -15,6 +15,8 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import javax.annotation.Resource;
+
 /**
  * 配置类，注册web层相关组件
  */
@@ -22,7 +24,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Slf4j
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
-    @Autowired
+    @Resource
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
 
     /**
@@ -39,29 +41,37 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     /**
      * 通过knife4j生成接口文档
+     *
      * @return
      */
     @Bean
     public Docket docket() {
+        log.info("准备设置接口文档......");
         ApiInfo apiInfo = new ApiInfoBuilder()
+                //项目名称
                 .title("苍穹外卖项目接口文档")
+                //版本
                 .version("2.0")
+                //标题
                 .description("苍穹外卖项目接口文档")
                 .build();
-        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))
+                //指定包扫描
+                .apis(RequestHandlerSelectors.basePackage("com.xlhl.sky.controller"))
                 .paths(PathSelectors.any())
                 .build();
-        return docket;
     }
 
     /**
      * 设置静态资源映射
+     *
      * @param registry
      */
+    @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        log.info("静态资源开始映射......");
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
