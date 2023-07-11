@@ -1,6 +1,6 @@
 package com.xlhl.sky.dto;
 
-import com.xlhl.sky.entity.SetmealDish;
+import com.xlhl.sky.entity.SetMealDish;
 import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class SetmealDTO implements Serializable {
+public class SetMealDTO implements Serializable {
 
     private Long id;
 
@@ -31,6 +31,6 @@ public class SetmealDTO implements Serializable {
     private String image;
 
     //套餐菜品关系
-    private List<SetmealDish> setmealDishes = new ArrayList<>();
+    private List<SetMealDish> setMealDishes = new ArrayList<>();
 
 }

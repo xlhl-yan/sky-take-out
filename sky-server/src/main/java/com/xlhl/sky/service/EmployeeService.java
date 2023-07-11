@@ -23,11 +23,34 @@ public interface EmployeeService {
      */
     void save(EmployeeDTO employee) throws Exception;
 
+    /**
+     * 分页查询员工信息
+     *
+     * @param employeePageQueryDTO
+     * @return
+     */
     PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
 
+    /**
+     * 启用禁用员工账号
+     *
+     * @param status 修改后状态码
+     * @param id     员工id
+     */
     void startOfStop(Integer status, Long id) throws Exception;
 
+    /**
+     * 根据id查询指定员工
+     *
+     * @param id 员工id
+     * @return
+     */
     Employee queryEmployeeById(Long id);
 
-    void updateEmployee(EmployeeDTO employee) throws Exception;
+    /**
+     * 根据id修改员工信息
+     *
+     * @param employeeDTO
+     */
+    void updateEmployee(EmployeeDTO employeeDTO) throws Exception;
 }

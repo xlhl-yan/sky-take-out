@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Mapper
 @Repository
-public interface SetmealMapper {
+public interface SetMealMapper {
 
     /**
      * 根据分类id查询套餐的数量

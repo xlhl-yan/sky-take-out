@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xlhl.sky.mapper.SetMealDishMapper">
+
+    <select id="getSetMealIdsByIds" resultType="java.lang.Long">
+        SELECT setmeal_id FROM SETMEAL_DISH
+        <where>
+            dish_id IN
+            <if test="dishIds != null">
+                <foreach collection="dishIds" item="ids" open="(" close=")" separator=",">
+                    #{ids}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>

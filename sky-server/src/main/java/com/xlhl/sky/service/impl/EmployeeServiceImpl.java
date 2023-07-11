@@ -111,10 +111,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.insertEmployee(employee);
     }
 
+    /**
+     * 分页查询员工信息
+     *
+     * @param employeePageQueryDTO
+     * @return
+     */
     @Override
     public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
         //参数校验
-        if (employeePageQueryDTO.getPage() <= 0 || employeePageQueryDTO.getPage() > Integer.MAX_VALUE) {
+        if (employeePageQueryDTO.getPage() <= 0) {
             employeePageQueryDTO.setPage(1);
         }
 

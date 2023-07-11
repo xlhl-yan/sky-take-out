@@ -10,7 +10,7 @@ import com.xlhl.sky.entity.Category;
 import com.xlhl.sky.exception.DeletionNotAllowedException;
 import com.xlhl.sky.mapper.CategoryMapper;
 import com.xlhl.sky.mapper.DishMapper;
-import com.xlhl.sky.mapper.SetmealMapper;
+import com.xlhl.sky.mapper.SetMealMapper;
 import com.xlhl.sky.result.PageResult;
 import com.xlhl.sky.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +31,8 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryMapper categoryMapper;
     @Resource(name = "dishMapper")
     private DishMapper dishMapper;
-    @Resource(name = "setmealMapper")
-    private SetmealMapper setmealMapper;
+    @Resource(name = "setMealMapper")
+    private SetMealMapper setmealMapper;
 
     /**
      * 新增分类
