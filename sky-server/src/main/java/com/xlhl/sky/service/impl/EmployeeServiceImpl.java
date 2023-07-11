@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import com.xlhl.sky.constant.MessageConstant;
 import com.xlhl.sky.constant.PasswordConstant;
 import com.xlhl.sky.constant.StatusConstant;
-import com.xlhl.sky.context.BaseContext;
 import com.xlhl.sky.dto.EmployeeDTO;
 import com.xlhl.sky.dto.EmployeeLoginDTO;
 import com.xlhl.sky.dto.EmployeePageQueryDTO;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,7 +31,7 @@ import java.util.Objects;
 @Transactional
 public class EmployeeServiceImpl implements EmployeeService {
 
-    @Resource
+    @Resource(name = "employeeMapper")
     private EmployeeMapper employeeMapper;
 
     /**
@@ -81,7 +79,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void save(EmployeeDTO employeeDTO) throws Exception {
         log.info("当前线程的id==>{}", Thread.currentThread().getId());
-
         if (employeeDTO == null) {
             log.error(MessageConstant.EMPLOYEE_NULL);
             throw new Exception(MessageConstant.EMPLOYEE_NULL);
@@ -97,6 +94,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         //设置默认密码
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
 
+        /*
         //设置创建时间
         LocalDateTime dateTime = LocalDateTime.now();
         employee.setCreateTime(dateTime);
@@ -107,9 +105,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         Long empId = BaseContext.getCurrentId();
         employee.setCreateUser(empId);
         employee.setUpdateUser(empId);
+        */
 
         //插入新员工数据
-        employeeMapper.insert(employee);
+        employeeMapper.insertEmployee(employee);
     }
 
     @Override
@@ -140,7 +139,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void startOfStop(Integer status, Long id) throws Exception {
         if (!status.equals(StatusConstant.DISABLE) && !status.equals(StatusConstant.ENABLE)) {
-            throw new Exception("状态参数异常");
+            log.error("状态参数异常");
         }
         Employee build = Employee.builder()
                 .status(status)
@@ -162,7 +161,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee queryEmployeeById(Long id) {
         Employee employee = employeeMapper.selectById(id);
         if (employee == null) {
-            throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
+            log.error(MessageConstant.ACCOUNT_NOT_FOUND);
         }
         //将密码设置为******防止密码泄露
         employee.setPassword("******");
@@ -177,16 +176,22 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void updateEmployee(EmployeeDTO employeeDTO) throws Exception {
         if (employeeDTO.getId() == null) {
-            throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
+            log.error(MessageConstant.ACCOUNT_NOT_FOUND);
         }
+
+        //数据拷贝
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO, employee);
+
+        /*
         //设置更新时间与修改人员id
         employee.setUpdateTime(LocalDateTime.now());
         employee.setUpdateUser(BaseContext.getCurrentId());
-        int count = employeeMapper.updateById(employee);
+        */
+
+        int count = employeeMapper.updateEmployee(employee);
         if (count > 1) {
-            throw new Exception(MessageConstant.UNKNOWN_ERROR);
+            log.error(MessageConstant.UNKNOWN_ERROR);
         }
     }
 }

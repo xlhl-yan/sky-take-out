@@ -29,7 +29,7 @@ import java.util.Map;
 @Api(tags = "员工相关接口")
 public class EmployeeController {
 
-    @Resource
+    @Resource(name = "employeeServiceImpl")
     private EmployeeService employeeService;
     @Resource
     private JwtProperties jwtProperties;
@@ -109,12 +109,12 @@ public class EmployeeController {
 
     /**
      * 启用禁用员工账号
+     * /admin/employee/status/{status}
      *
      * @param status 账号将要修改状态
      * @param id     员工id
      * @return
      */
-    ///admin/employee/status/{status}
     @PostMapping("/status/{status}")
     @ApiOperation(value = "启动与禁用员工账号")
     public Result startOfStop(@PathVariable("status") Integer status, Long id) throws Exception {
@@ -126,11 +126,11 @@ public class EmployeeController {
 
     /**
      * 根据id查询指定员工
+     * /admin/employee/{id}
      *
      * @param id 员工id
      * @return
      */
-    ///admin/employee/{id}
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询员工信息")
     public Result<Employee> queryEmployeeById(@PathVariable("id") Long id) {
@@ -140,12 +140,12 @@ public class EmployeeController {
 
     /**
      * 根据id修改员工信息
+     * /admin/employee
      *
      * @param employee 修改后的员工信息
      * @return
      * @throws Exception
      */
-    //admin/employee
     @PutMapping
     @ApiOperation(value = "根据id修改员工信息")
     public Result updateEmployee(@RequestBody EmployeeDTO employee) throws Exception {

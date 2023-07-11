@@ -11,4 +11,47 @@
         </where>
         order by create_time desc
     </select>
+
+    <insert id="insertEmployee" parameterType="com.xlhl.sky.entity.Employee">
+        INSERT INTO EMPLOYEE (NAME, USERNAME, PASSWORD, SEX, ID_NUMBER, CREATE_TIME, UPDATE_TIME, CREATE_USER,
+                              UPDATE_USER)
+        VALUES (#{name}, #{username}, #{password}, #{sex}, #{idNumber}, #{createTime}, #{updateTime}, #{CreateUser},
+                #{updateUser});
+    </insert>
+
+    <update id="updateEmployee" parameterType="com.xlhl.sky.entity.Employee">
+        UPDATE EMPLOYEE
+        <set>
+            <if test="name!=null and name!=''">
+                NAME = #{name},
+            </if>
+            <if test="username!=null and username!=''">
+                USERNAME = #{username},
+            </if>
+            <if test="password!=null and password!=''">
+                PASSWORD = #{password},
+            </if>
+            <if test="phone!=null and phone!=''">
+                phone = #{phone},
+            </if>
+            <if test="sex!=null and sex!=''">
+                sex = #{sex},
+            </if>
+            <if test="idNumber!=null and idNumber!=''">
+                id_number = #{idNumber},
+            </if>
+            <if test="status!=null and status!=''">
+                status = #{status},
+            </if>
+            <if test="updateTime!=null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUser!=null and updateUser!=''">
+                update_user = #{updateUser}
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
 </mapper>
