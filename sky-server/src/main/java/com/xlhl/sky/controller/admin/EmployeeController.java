@@ -123,4 +123,33 @@ public class EmployeeController {
         log.info("{}员工账号状态改变为{}", id, status == 1 ? "启用" : "禁用");
         return Result.success();
     }
+
+    /**
+     * 根据id查询指定员工
+     *
+     * @param id 员工id
+     * @return
+     */
+    ///admin/employee/{id}
+    @GetMapping("/{id}")
+    @ApiOperation(value = "根据id查询员工信息")
+    public Result<Employee> queryEmployeeById(@PathVariable("id") Long id) {
+        Employee employee = employeeService.queryEmployeeById(id);
+        return Result.success(employee);
+    }
+
+    /**
+     * 根据id修改员工信息
+     *
+     * @param employee 修改后的员工信息
+     * @return
+     * @throws Exception
+     */
+    //admin/employee
+    @PutMapping
+    @ApiOperation(value = "根据id修改员工信息")
+    public Result updateEmployee(@RequestBody EmployeeDTO employee) throws Exception {
+        employeeService.updateEmployee(employee);
+        return Result.success();
+    }
 }

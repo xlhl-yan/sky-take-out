@@ -139,14 +139,54 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public void startOfStop(Integer status, Long id) throws Exception {
+        if (!status.equals(StatusConstant.DISABLE) && !status.equals(StatusConstant.ENABLE)) {
+            throw new Exception("状态参数异常");
+        }
         Employee build = Employee.builder()
                 .status(status)
                 .id(id)
                 .build();
-        int i = employeeMapper.updateById(build);
-        if (i > 1) {
+        int count = employeeMapper.updateById(build);
+        if (count > 1) {
             throw new Exception(MessageConstant.UNKNOWN_ERROR);
         }
     }
 
+    /**
+     * 根据id查询指定员工
+     *
+     * @param id 员工id
+     * @return
+     */
+    @Override
+    public Employee queryEmployeeById(Long id) {
+        Employee employee = employeeMapper.selectById(id);
+        if (employee == null) {
+            throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
+        }
+        //将密码设置为******防止密码泄露
+        employee.setPassword("******");
+        return employee;
+    }
+
+    /**
+     * 根据id修改员工信息
+     *
+     * @param employeeDTO
+     */
+    @Override
+    public void updateEmployee(EmployeeDTO employeeDTO) throws Exception {
+        if (employeeDTO.getId() == null) {
+            throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
+        }
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        //设置更新时间与修改人员id
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        int count = employeeMapper.updateById(employee);
+        if (count > 1) {
+            throw new Exception(MessageConstant.UNKNOWN_ERROR);
+        }
+    }
 }
