@@ -24,4 +24,6 @@ public interface EmployeeService {
     void save(EmployeeDTO employee) throws Exception;
 
     PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
+
+    void startOfStop(Integer status, Long id) throws Exception;
 }

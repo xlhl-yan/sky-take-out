@@ -1,6 +1,5 @@
 package com.xlhl.sky.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xlhl.sky.constant.MessageConstant;
@@ -20,6 +19,7 @@ import com.xlhl.sky.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
@@ -30,6 +30,7 @@ import java.util.Objects;
 
 @Service
 @Slf4j
+@Transactional
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Resource
@@ -128,6 +129,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return new PageResult(total, result);
 
+    }
+
+    /**
+     * 启用禁用员工账号
+     *
+     * @param status 修改后状态码
+     * @param id     员工id
+     */
+    @Override
+    public void startOfStop(Integer status, Long id) throws Exception {
+        Employee build = Employee.builder()
+                .status(status)
+                .id(id)
+                .build();
+        int i = employeeMapper.updateById(build);
+        if (i > 1) {
+            throw new Exception(MessageConstant.UNKNOWN_ERROR);
+        }
     }
 
 }
