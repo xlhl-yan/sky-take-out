@@ -11,3 +11,8 @@ sky:
     access-key-secret: U6K1brOZBgaoIXv3nXbuIGTUzy6Pd7
     bucket-name: sky-itcast
     endpoint: oss-cn-beijing.aliyuncs.com
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    #指定数据库序号，数据库之前数据完全隔离
+    database: 0

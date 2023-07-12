@@ -14,4 +14,9 @@
         FROM DISH_FLAVOR
         WHERE DISH_ID = #{dishId}
     </delete>
+    <select id="queryDishFlavorsByDishId" resultType="com.xlhl.sky.entity.DishFlavor">
+        SELECT *
+        FROM DISH_FLAVOR
+        WHERE DISH_ID = #{id}
+    </select>
 </mapper>

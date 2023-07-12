@@ -4,6 +4,7 @@ import com.xlhl.sky.dto.DishDTO;
 import com.xlhl.sky.dto.DishPageQueryDTO;
 import com.xlhl.sky.result.Result;
 import com.xlhl.sky.service.DishService;
+import com.xlhl.sky.vo.DishVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,37 @@ import java.util.List;
 public class DishController {
     @Resource(name = "dishServiceImpl")
     private DishService dishService;
+
+    /**
+     * 根据id查询菜品及口味信息
+     * /admin/dish/{id}
+     *
+     * @param dishId
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation(value = "根据菜品id查询菜品信息")
+    public Result<DishVO> queryDishById(@PathVariable("id") Long dishId) {
+        log.info("查询此菜品信息：{}", dishId);
+
+        DishVO dishVO = dishService.queryByIdWithFlavor(dishId);
+        return Result.success(dishVO);
+    }
+
+    /**
+     * 修改菜品及口味信息
+     *
+     * @param dishDTO
+     * @return
+     */
+    @PutMapping
+    @ApiOperation(value = "修改菜品信息")
+    public Result updateDish(@RequestBody DishDTO dishDTO) {
+        log.info("修改菜品信息：{}", dishDTO);
+
+        dishService.updateWithFlavor(dishDTO);
+        return Result.success();
+    }
 
     /**
      * 根据id删除一个或多个菜品

@@ -37,6 +37,7 @@ public class CommonController {
         log.info("文件开始上传......");
         if (file == null) {
             log.error("文件上传为空...");
+            return Result.error("上传文件为空");
         }
         try {
             //原始文件名称

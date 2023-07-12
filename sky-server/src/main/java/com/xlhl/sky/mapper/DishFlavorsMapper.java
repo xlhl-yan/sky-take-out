@@ -18,5 +18,18 @@ public interface DishFlavorsMapper extends BaseMapper<DishFlavor> {
      */
     void addFlavors(List<DishFlavor> flavorsList);
 
+    /**
+     * 根据id删除口味
+     *
+     * @param dishId
+     */
     void delById(@Param("dishId") Long dishId);
+
+    /**
+     * 根据菜品id查询口味信息
+     *
+     * @param id
+     * @return
+     */
+    List<DishFlavor> queryDishFlavorsByDishId(@Param("id") Long id);
 }

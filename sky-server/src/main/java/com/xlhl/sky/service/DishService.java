@@ -4,6 +4,7 @@ import com.xlhl.sky.dto.DishDTO;
 import com.xlhl.sky.dto.DishPageQueryDTO;
 import com.xlhl.sky.result.PageResult;
 import com.xlhl.sky.result.Result;
+import com.xlhl.sky.vo.DishVO;
 
 import java.util.List;
 
@@ -25,7 +26,23 @@ public interface DishService {
 
     /**
      * 根据id删除一个或多个菜品
+     *
      * @param ids
      */
     void deleteDishByIds(List<Long> ids);
+
+    /**
+     * 根据id查询菜品及口味数据
+     *
+     * @param dishId
+     * @return
+     */
+    DishVO queryByIdWithFlavor(Long dishId);
+
+    /**
+     * 根据id修改对应的菜品及口味信息
+     *
+     * @param dishDTO
+     */
+    void updateWithFlavor(DishDTO dishDTO);
 }

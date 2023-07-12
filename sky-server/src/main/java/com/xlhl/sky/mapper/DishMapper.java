@@ -47,4 +47,12 @@ public interface DishMapper extends BaseMapper<Dish> {
      * @param dishId
      */
     void delById(@Param("dishId") Long dishId);
+
+    /**
+     * 根据id修改菜品数据
+     *
+     * @param dish
+     */
+    @AutoFill(OperationType.UPDATE)
+    Integer updateDishById(Dish dish);
 }
