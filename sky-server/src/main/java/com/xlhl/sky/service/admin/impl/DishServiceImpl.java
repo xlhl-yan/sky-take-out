@@ -83,6 +83,7 @@ public class DishServiceImpl implements DishService {
         //分页插件使用 分页查询
         PageHelper.startPage(dishPageQueryDTO.getPage(), dishPageQueryDTO.getPageSize());
         Page<DishVO> dishPage = dishMapper.pageQuery(dishPageQueryDTO);
+
         return new PageResult(dishPage.getTotal(), dishPage.getResult());
     }
 
@@ -202,5 +203,32 @@ public class DishServiceImpl implements DishService {
         }
 
         return dishVOList;
+    }
+
+    /**
+     * 根据分类id查询菜品
+     *
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<Dish> list(Long categoryId) {
+        assert categoryId != null;
+        List<Dish> dish = dishMapper.queryDishByCategoryId(categoryId);
+        assert dish != null;
+        return dish;
+    }
+
+    @Override
+    public void updateStatus(Long id, Integer status) {
+        assert id != null && status != null;
+
+        //==>菜品是否存在
+        Dish dish = dishMapper.queryDishById(id);
+        assert dish != null;
+
+        //==>改变菜品状态
+        Integer count = dishMapper.updateDishStatusById(id, status);
+        assert count == 1;
     }
 }

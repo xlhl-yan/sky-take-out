@@ -2,6 +2,7 @@ package com.xlhl.sky.controller.admin;
 
 import com.xlhl.sky.dto.DishDTO;
 import com.xlhl.sky.dto.DishPageQueryDTO;
+import com.xlhl.sky.entity.Dish;
 import com.xlhl.sky.result.Result;
 import com.xlhl.sky.service.admin.DishService;
 import com.xlhl.sky.vo.DishVO;
@@ -23,6 +24,37 @@ import java.util.List;
 public class DishController {
     @Resource(name = "dishServiceImpl")
     private DishService dishService;
+
+
+    /**
+     * /admin/dish/status/{status}
+     *
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation(value = "根据id修改菜品状态 1：起售 0：停售")
+    public Result status(Long id, @PathVariable("status") Integer status) {
+        log.info("{}菜品状态改为：{}", id, status == 1 ? "起售" : "停售");
+
+        dishService.updateStatus(id, status);
+        return Result.success();
+    }
+
+    /**
+     * 根据分类id查询菜品
+     * /admin/dish/list
+     *
+     * @param categoryId
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation(value = "根据分类id查询菜品")
+    public Result<List<Dish>> list(@RequestParam("categoryId") Long categoryId) {
+        log.info("查询此分类的菜品:{}", categoryId);
+
+        List<Dish> dishList = dishService.list(categoryId);
+        return Result.success(dishList);
+    }
 
     /**
      * 根据id查询菜品及口味信息
@@ -57,7 +89,7 @@ public class DishController {
 
     /**
      * 根据id删除一个或多个菜品
-     * //admin/dish
+     * /admin/dish
      *
      * @param ids
      */

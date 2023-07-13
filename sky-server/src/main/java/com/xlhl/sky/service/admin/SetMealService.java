@@ -10,10 +10,10 @@ public interface SetMealService {
     /**
      * 条件查询
      *
-     * @param setmeal
+     * @param setMeal
      * @return
      */
-    List<SetMeal> list(SetMeal setmeal);
+    List<SetMeal> list(SetMeal setMeal);
 
     /**
      * 根据id查询菜品选项

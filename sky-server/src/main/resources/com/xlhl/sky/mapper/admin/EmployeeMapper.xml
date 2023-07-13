@@ -23,7 +23,7 @@
         UPDATE EMPLOYEE
         <set>
             <if test="name!=null and name!=''">
-                NAME = #{name},
+                NAME like concat('%',#{name},'%'),
             </if>
             <if test="username!=null and username!=''">
                 USERNAME = #{username},

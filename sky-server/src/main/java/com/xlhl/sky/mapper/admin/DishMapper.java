@@ -65,4 +65,28 @@ public interface DishMapper extends BaseMapper<Dish> {
      * @return
      */
     List<Dish> list(Dish dish);
+
+    /**
+     * 根据id查询菜品
+     *
+     * @param id
+     * @return
+     */
+    Dish queryDishById(@Param("id") Long id);
+
+    /**
+     * 根据id改变菜品状态
+     *
+     * @param id
+     * @param status
+     */
+    Integer updateDishStatusById(@Param("id") Long id, @Param("status") Integer status);
+
+    /**
+     * 根据分类id查询菜品
+     *
+     * @param categoryId
+     * @return
+     */
+    List<Dish> queryDishByCategoryId(@Param("categoryId") Long categoryId);
 }
