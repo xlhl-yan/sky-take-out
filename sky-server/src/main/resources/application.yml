@@ -43,19 +43,33 @@ logging:
 
 sky:
   jwt:
+    # 管理端
     # 设置jwt签名加密时使用的秘钥
-    admin-secret-key: itcast
+    admin-secret-key: admin
     # 设置jwt过期时间
     admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+
+    # 用户端
+    # 设置jwt签名加密使用密钥
+    user-secret-key: user
+    # 设置jwt过期时间
+    user-ttl: 720000
+    # 设置前端传递过来的令牌名称
+    user-token-name: authentication
   #阿里云存储配置
   alioss:
     endpoint: ${sky.alioss.endpoint}
     access-key-id: ${sky.alioss.access-key-id}
     access-key-secret: ${sky.alioss.access-key-secret}
     bucket-name: ${sky.alioss.bucket-name}
+  # 微信小程序 appid 与 密钥
+  wechat:
+    appid: ${sky.wechat.appid}
+    secret: ${sky.wechat.secret}
 
+# mybatis-plus日志输出打印
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

@@ -1,4 +1,4 @@
-package com.xlhl.sky.mapper;
+package com.xlhl.sky.mapper.admin;
 
 import com.github.pagehelper.Page;
 import com.xlhl.sky.annotation.AutoFill;

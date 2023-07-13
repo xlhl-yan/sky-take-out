@@ -2,7 +2,7 @@ package com.xlhl.sky.controller.admin;
 
 import com.xlhl.sky.constant.MessageConstant;
 import com.xlhl.sky.result.Result;
-import com.xlhl.sky.service.ShopService;
+import com.xlhl.sky.service.admin.ShopService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 @Slf4j
 @RequestMapping("/admin/shop")
 @Api(tags = "商家管理相关接口")
-public class ShopAdminController {
+public class ShopController {
     @Resource(name = "shopServiceImpl")
     private ShopService shopService;
 

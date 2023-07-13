@@ -4,7 +4,6 @@ package com.xlhl.sky.constant;
  * 信息提示常量类
  */
 public class MessageConstant {
-
     public static final String PASSWORD_ERROR = "密码错误";
     public static final String ALREADY_EXISTS = "用户名已存在";
     public static final String EMPLOYEE_NULL = "新员工信息为空";

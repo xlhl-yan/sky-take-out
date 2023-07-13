@@ -1,4 +1,4 @@
-package com.xlhl.sky.service.impl;
+package com.xlhl.sky.service.admin.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -12,9 +12,9 @@ import com.xlhl.sky.entity.Employee;
 import com.xlhl.sky.exception.AccountLockedException;
 import com.xlhl.sky.exception.AccountNotFoundException;
 import com.xlhl.sky.exception.PasswordErrorException;
-import com.xlhl.sky.mapper.EmployeeMapper;
+import com.xlhl.sky.mapper.admin.EmployeeMapper;
 import com.xlhl.sky.result.PageResult;
-import com.xlhl.sky.service.EmployeeService;
+import com.xlhl.sky.service.admin.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

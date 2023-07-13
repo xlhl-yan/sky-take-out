@@ -2,9 +2,9 @@ package com.xlhl.sky.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xlhl.sky.properties.WeChatProperties;
 import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
 import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
+import com.xlhl.sky.properties.WeChatProperties;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -14,9 +14,9 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -41,7 +41,7 @@ public class WeChatPayUtil {
     //申请退款接口地址
     public static final String REFUNDS = "https://api.mch.weixin.qq.com/v3/refund/domestic/refunds";
 
-    @Autowired
+    @Resource(name = "weChatProperties")
     private WeChatProperties weChatProperties;
 
     /**
@@ -54,9 +54,12 @@ public class WeChatPayUtil {
         try {
             //merchantPrivateKey商户API私钥，如何加载商户API私钥请看常见问题
             merchantPrivateKey = PemUtil.loadPrivateKey(new FileInputStream(new File(weChatProperties.getPrivateKeyFilePath())));
+
             //加载平台证书文件
             X509Certificate x509Certificate = PemUtil.loadCertificate(new FileInputStream(new File(weChatProperties.getWeChatPayCertFilePath())));
-            //weChatPayCertificates微信支付平台证书列表。你也可以使用后面章节提到的“定时更新平台证书功能”，而不需要关心平台证书的来龙去脉
+
+            //weChatPayCertificates微信支付平台证书列表。你也可以使用后面章节提到的“定时更新平台证书功能”
+            //而不需要关心平台证书的来龙去脉
             List<X509Certificate> weChatPayCertificates = Arrays.asList(x509Certificate);
 
             WechatPayHttpClientBuilder builder = WechatPayHttpClientBuilder.create()
@@ -64,8 +67,7 @@ public class WeChatPayUtil {
                     .withWechatPay(weChatPayCertificates);
 
             // 通过WeChatPayHttpClientBuilder构造的HttpClient，会自动的处理签名和验签
-            CloseableHttpClient httpClient = builder.build();
-            return httpClient;
+            return builder.build();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;
@@ -208,10 +210,10 @@ public class WeChatPayUtil {
     /**
      * 申请退款
      *
-     * @param outTradeNo    商户订单号
-     * @param outRefundNo   商户退款单号
-     * @param refund        退款金额
-     * @param total         原订单金额
+     * @param outTradeNo  商户订单号
+     * @param outRefundNo 商户退款单号
+     * @param refund      退款金额
+     * @param total       原订单金额
      * @return
      */
     public String refund(String outTradeNo, String outRefundNo, BigDecimal refund, BigDecimal total) throws Exception {

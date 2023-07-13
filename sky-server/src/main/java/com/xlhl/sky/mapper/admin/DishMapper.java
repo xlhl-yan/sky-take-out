@@ -1,4 +1,4 @@
-package com.xlhl.sky.mapper;
+package com.xlhl.sky.mapper.admin;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.pagehelper.Page;
@@ -11,6 +11,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 @Mapper
@@ -55,4 +57,12 @@ public interface DishMapper extends BaseMapper<Dish> {
      */
     @AutoFill(OperationType.UPDATE)
     Integer updateDishById(Dish dish);
+
+    /**
+     * 条件查询菜品和口味
+     *
+     * @param dish
+     * @return
+     */
+    List<Dish> list(Dish dish);
 }

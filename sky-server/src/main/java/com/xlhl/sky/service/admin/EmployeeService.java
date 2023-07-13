@@ -1,4 +1,4 @@
-package com.xlhl.sky.service;
+package com.xlhl.sky.service.admin;
 
 import com.xlhl.sky.dto.EmployeeDTO;
 import com.xlhl.sky.dto.EmployeeLoginDTO;

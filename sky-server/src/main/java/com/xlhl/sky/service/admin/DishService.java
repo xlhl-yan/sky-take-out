@@ -1,7 +1,8 @@
-package com.xlhl.sky.service;
+package com.xlhl.sky.service.admin;
 
 import com.xlhl.sky.dto.DishDTO;
 import com.xlhl.sky.dto.DishPageQueryDTO;
+import com.xlhl.sky.entity.Dish;
 import com.xlhl.sky.result.PageResult;
 import com.xlhl.sky.result.Result;
 import com.xlhl.sky.vo.DishVO;
@@ -45,4 +46,12 @@ public interface DishService {
      * @param dishDTO
      */
     void updateWithFlavor(DishDTO dishDTO);
+
+    /**
+     * 条件查询菜品与口味
+     *
+     * @param dish
+     * @return
+     */
+    List<DishVO> listWithFlavor(Dish dish);
 }

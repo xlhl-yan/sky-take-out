@@ -1,7 +1,6 @@
 package com.xlhl.sky.controller.user;
 
 import com.xlhl.sky.constant.MessageConstant;
-import com.xlhl.sky.controller.admin.ShopAdminController;
 import com.xlhl.sky.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,8 +16,9 @@ import javax.annotation.Resource;
 @RestController
 @Api(tags = "用户查询店铺")
 @Slf4j
-public class ShopUserController {
+public class UserShopController {
 
+    public static final String SHOP_KEY = "SHOP_STATUS";
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -31,7 +31,7 @@ public class ShopUserController {
     @GetMapping("/status")
     @ApiOperation("查询店铺营业状态 1：营业 0：打样")
     public Result<Integer> status() {
-        Integer status = (Integer) redisTemplate.opsForValue().get(ShopAdminController.SHOP_KEY);
+        Integer status = (Integer) redisTemplate.opsForValue().get(SHOP_KEY);
 
         if (status == null) {
             return Result.error(MessageConstant.UNKNOWN_ERROR);

@@ -1,4 +1,4 @@
-package com.xlhl.sky.service.impl;
+package com.xlhl.sky.service.admin.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -8,11 +8,11 @@ import com.xlhl.sky.dto.CategoryDTO;
 import com.xlhl.sky.dto.CategoryPageQueryDTO;
 import com.xlhl.sky.entity.Category;
 import com.xlhl.sky.exception.DeletionNotAllowedException;
-import com.xlhl.sky.mapper.CategoryMapper;
-import com.xlhl.sky.mapper.DishMapper;
-import com.xlhl.sky.mapper.SetMealMapper;
+import com.xlhl.sky.mapper.admin.CategoryMapper;
+import com.xlhl.sky.mapper.admin.DishMapper;
+import com.xlhl.sky.mapper.admin.SetMealMapper;
 import com.xlhl.sky.result.PageResult;
-import com.xlhl.sky.service.CategoryService;
+import com.xlhl.sky.service.admin.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -29,10 +29,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Resource(name = "categoryMapper")
     private CategoryMapper categoryMapper;
+
     @Resource(name = "dishMapper")
     private DishMapper dishMapper;
+
     @Resource(name = "setMealMapper")
-    private SetMealMapper setmealMapper;
+    private SetMealMapper setMealMapper;
 
     /**
      * 新增分类
@@ -84,7 +86,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         //查询当前分类是否关联了套餐，如果关联了就抛出业务异常
-        count = setmealMapper.countByCategoryId(id);
+        count = setMealMapper.countByCategoryId(id);
         if (count > 0) {
             //当前分类下有菜品，不能删除
             throw new DeletionNotAllowedException(MessageConstant.CATEGORY_BE_RELATED_BY_SETMEAL);

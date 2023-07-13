@@ -1,4 +1,4 @@
-package com.xlhl.sky.service;
+package com.xlhl.sky.service.admin;
 
 import com.xlhl.sky.dto.CategoryDTO;
 import com.xlhl.sky.dto.CategoryPageQueryDTO;

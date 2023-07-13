@@ -5,7 +5,7 @@ import com.xlhl.sky.dto.CategoryPageQueryDTO;
 import com.xlhl.sky.entity.Category;
 import com.xlhl.sky.result.PageResult;
 import com.xlhl.sky.result.Result;
-import com.xlhl.sky.service.CategoryService;
+import com.xlhl.sky.service.admin.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

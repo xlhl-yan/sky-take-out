@@ -1,6 +1,7 @@
 package com.xlhl.sky.config;
 
 import com.xlhl.sky.interceptor.JwtTokenAdminInterceptor;
+import com.xlhl.sky.interceptor.JwtTokenUserInterceptor;
 import com.xlhl.sky.json.JacksonObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -27,20 +28,31 @@ import java.util.List;
 @Slf4j
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
-    @Resource
+    @Resource(name = "jwtTokenAdminInterceptor")
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
+
+    @Resource(name = "jwtTokenUserInterceptor")
+    private JwtTokenUserInterceptor jwtTokenUserInterceptor;
 
     /**
      * 注册自定义拦截器
      *
      * @param registry
      */
+    @Override
     protected void addInterceptors(InterceptorRegistry registry) {
         log.info("开始注册自定义拦截器...");
+        //客户端登录校验
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/admin/employee/login");
+
+        //客户端登录校验
+        registry.addInterceptor(jwtTokenUserInterceptor)
+                .addPathPatterns("/user/**")
+                .excludePathPatterns("/user/shop/status", "/user/user/login");
     }
+
 
     /**
      * 通过knife4j生成接口文档
@@ -59,40 +71,40 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .description("苍穹外卖项目接口文档")
                 .build();
         return new Docket(DocumentationType.SWAGGER_2)
-//                .groupName("管理端接口")
+                .groupName("管理端接口")
                 .apiInfo(apiInfo)
                 .select()
                 //指定包扫描
-                .apis(RequestHandlerSelectors.basePackage("com.xlhl.sky.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.xlhl.sky.controller.admin"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
-//    /**
-//     * 通过knife4j生成接口文档
-//     *
-//     * @return
-//     */
-//    @Bean
-//    public Docket docketUser() {
-//        log.info("准备设置接口文档......");
-//        ApiInfo apiInfo = new ApiInfoBuilder()
-//                //项目名称
-//                .title("苍穹外卖项目接口文档")
-//                //版本
-//                .version("2.0")
-//                //标题
-//                .description("苍穹外卖项目接口文档")
-//                .build();
-//        return new Docket(DocumentationType.SWAGGER_2)
-//                .groupName("用户端接口")
-//                .apiInfo(apiInfo)
-//                .select()
-//                //指定包扫描
-//                .apis(RequestHandlerSelectors.basePackage("com.xlhl.sky.controller.user"))
-//                .paths(PathSelectors.any())
-//                .build();
-//    }
+    /**
+     * 通过knife4j生成接口文档
+     *
+     * @return
+     */
+    @Bean
+    public Docket docketUser() {
+        log.info("准备设置接口文档......");
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                //项目名称
+                .title("苍穹外卖项目接口文档")
+                //版本
+                .version("2.0")
+                //标题
+                .description("苍穹外卖项目接口文档")
+                .build();
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("用户端接口")
+                .apiInfo(apiInfo)
+                .select()
+                //指定包扫描
+                .apis(RequestHandlerSelectors.basePackage("com.xlhl.sky.controller.user"))
+                .paths(PathSelectors.any())
+                .build();
+    }
 
     /**
      * 设置静态资源映射

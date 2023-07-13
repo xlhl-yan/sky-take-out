@@ -16,3 +16,6 @@ sky:
     port: 6379
     #指定数据库序号，数据库之前数据完全隔离
     database: 0
+  wechat:
+    appid: wx7d4fd85e388a68b4
+    secret: 677536fa5ed5f3f9c8f2eec47600503c

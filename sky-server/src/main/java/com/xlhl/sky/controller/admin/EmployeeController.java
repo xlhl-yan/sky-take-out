@@ -8,7 +8,7 @@ import com.xlhl.sky.entity.Employee;
 import com.xlhl.sky.properties.JwtProperties;
 import com.xlhl.sky.result.PageResult;
 import com.xlhl.sky.result.Result;
-import com.xlhl.sky.service.EmployeeService;
+import com.xlhl.sky.service.admin.EmployeeService;
 import com.xlhl.sky.utils.JwtUtil;
 import com.xlhl.sky.vo.EmployeeLoginVO;
 import io.swagger.annotations.Api;

@@ -1,4 +1,4 @@
-package com.xlhl.sky.service.impl;
+package com.xlhl.sky.service.admin.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
@@ -10,12 +10,12 @@ import com.xlhl.sky.dto.DishPageQueryDTO;
 import com.xlhl.sky.entity.Dish;
 import com.xlhl.sky.entity.DishFlavor;
 import com.xlhl.sky.exception.DeletionNotAllowedException;
-import com.xlhl.sky.mapper.DishFlavorsMapper;
-import com.xlhl.sky.mapper.DishMapper;
-import com.xlhl.sky.mapper.SetMealDishMapper;
+import com.xlhl.sky.mapper.admin.DishFlavorsMapper;
+import com.xlhl.sky.mapper.admin.DishMapper;
+import com.xlhl.sky.mapper.admin.SetMealDishMapper;
 import com.xlhl.sky.result.PageResult;
 import com.xlhl.sky.result.Result;
-import com.xlhl.sky.service.DishService;
+import com.xlhl.sky.service.admin.DishService;
 import com.xlhl.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -174,5 +175,32 @@ public class DishServiceImpl implements DishService {
             //插入口味数据
             dishFlavorsMapper.addFlavors(flavorsList);
         }
+    }
+
+    /**
+     * 条件查询菜品和口味
+     *
+     * @param dish
+     * @return
+     */
+    @Override
+    public List<DishVO> listWithFlavor(Dish dish) {
+
+        List<Dish> dishList = dishMapper.list(dish);
+
+        List<DishVO> dishVOList = new ArrayList<>();
+
+        for (Dish d : dishList) {
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(d, dishVO);
+
+            //根据菜品id查询对应的口味
+            List<DishFlavor> flavors = dishFlavorsMapper.queryDishFlavorsByDishId(d.getId());
+
+            dishVO.setFlavors(flavors);
+            dishVOList.add(dishVO);
+        }
+
+        return dishVOList;
     }
 }

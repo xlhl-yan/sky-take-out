@@ -3,7 +3,7 @@ package com.xlhl.sky.controller.admin;
 import com.xlhl.sky.dto.DishDTO;
 import com.xlhl.sky.dto.DishPageQueryDTO;
 import com.xlhl.sky.result.Result;
-import com.xlhl.sky.service.DishService;
+import com.xlhl.sky.service.admin.DishService;
 import com.xlhl.sky.vo.DishVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

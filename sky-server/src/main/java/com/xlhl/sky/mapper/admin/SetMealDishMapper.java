@@ -1,4 +1,4 @@
-package com.xlhl.sky.mapper;
+package com.xlhl.sky.mapper.admin;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
