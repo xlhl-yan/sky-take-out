@@ -49,15 +49,15 @@ public class SetMealController {
     /**
      * 根据套餐id查询套餐信息
      *
-     * @param setMealId
+     * @param id
      * @return
      */
     @GetMapping("/{id}")
     @ApiOperation(value = "根据套餐id查询套餐信息")
-    @Cacheable(cacheNames = "SetMealCache", key = "#setMealId")
-    public Result<SetMealVO> querySetMealById(@PathVariable("id") Long setMealId) {
-        log.info("查询套餐信息id==>{}", setMealId);
-        SetMealVO setMeal = setMealService.querySetMealById(setMealId);
+    @Cacheable(cacheNames = "SetMealCache", key = "#id")
+    public Result<SetMealVO> querySetMealById(@PathVariable("id") Long id) {
+        log.info("查询套餐信息id==>{}", id);
+        SetMealVO setMeal = setMealService.querySetMealById(id);
 
         return Result.success(setMeal);
     }
@@ -96,6 +96,7 @@ public class SetMealController {
             "SetMealCachePage",
             "SetMealCategoryCache"}, allEntries = true)
     public Result updateStatus(@PathVariable("status") Integer status, Long id) {
+        log.info("{}此套餐修改状态为==>{}", id, status.equals(StatusConstant.ENABLE) ? "起售" : "停售");
         setMealService.updateStatus(status, id);
         return Result.success();
     }

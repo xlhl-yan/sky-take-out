@@ -17,7 +17,7 @@ import java.util.List;
 @Repository
 public interface SetMealMapper extends BaseMapper<SetMeal> {
 
-    /*/
+    /**
      * 动态条件查询套餐
      *
      * @param setmeal

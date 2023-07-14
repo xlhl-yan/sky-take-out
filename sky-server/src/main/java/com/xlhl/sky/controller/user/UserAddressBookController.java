@@ -3,7 +3,7 @@ package com.xlhl.sky.controller.user;
 import com.xlhl.sky.context.BaseContext;
 import com.xlhl.sky.entity.AddressBook;
 import com.xlhl.sky.result.Result;
-import com.xlhl.sky.service.user.AddressBookService;
+import com.xlhl.sky.service.user.UserAddressBookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +14,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/user/addressBook")
 @Api(tags = "C端地址簿接口")
-public class AddressBookController {
+public class UserAddressBookController {
 
-    @Resource(name = "addressBookServiceImpl")
-    private AddressBookService addressBookService;
+    @Resource(name = "userAddressBookServiceImpl")
+    private UserAddressBookService addressBookService;
 
     /**
      * 查询当前登录用户的所有地址信息
@@ -95,7 +95,7 @@ public class AddressBookController {
     /**
      * 查询默认地址
      */
-    @GetMapping("default")
+    @GetMapping("/default")
     @ApiOperation("查询默认地址")
     public Result<AddressBook> getDefault() {
         //SQL:select * from address_book where user_id = ? and is_default = 1

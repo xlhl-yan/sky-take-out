@@ -4,7 +4,7 @@ import com.xlhl.sky.entity.AddressBook;
 
 import java.util.List;
 
-public interface AddressBookService {
+public interface UserAddressBookService {
 
     List<AddressBook> list(AddressBook addressBook);
 

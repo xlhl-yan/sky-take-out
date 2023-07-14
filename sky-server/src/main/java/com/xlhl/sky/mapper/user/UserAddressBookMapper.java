@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface AddressBookMapper {
+public interface UserAddressBookMapper {
 
     /**
      * 条件查询

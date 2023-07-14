@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xlhl.sky.mapper.user.UserOrderDetailMapper">
+
+    <insert id="insertBatch">
+        INSERT INTO ORDER_DETAIL (NAME, IMAGE, ORDER_ID, DISH_ID, SETMEAL_ID, DISH_FLAVOR, AMOUNT)
+        VALUES
+        <foreach collection="orderDetailList" item="orderDetail" separator=",">
+            (#{orderDetail.name},#{orderDetail.image},#{orderDetail.orderId},#{orderDetail.dishId},#{orderDetail.setmealId},
+            #{orderDetail.dishFlavor},#{orderDetail.amount})
+        </foreach>
+    </insert>
+</mapper>

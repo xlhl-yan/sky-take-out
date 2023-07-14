@@ -68,8 +68,8 @@ public interface SetMealService {
     /**
      * 根据id查询套餐信息
      *
-     * @param setMealId
+     * @param id
      * @return
      */
-    SetMealVO querySetMealById(Long setMealId);
+    SetMealVO querySetMealById(Long id);
 }

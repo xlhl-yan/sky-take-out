@@ -3,11 +3,14 @@ package com.xlhl.sky.service.admin.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.xlhl.sky.context.BaseContext;
+import com.xlhl.sky.constant.MessageConstant;
+import com.xlhl.sky.constant.StatusConstant;
 import com.xlhl.sky.dto.SetMealDTO;
 import com.xlhl.sky.dto.SetMealPageQueryDTO;
+import com.xlhl.sky.entity.Dish;
 import com.xlhl.sky.entity.SetMeal;
 import com.xlhl.sky.entity.SetMealDish;
+import com.xlhl.sky.exception.SetMealEnableFailedException;
 import com.xlhl.sky.mapper.admin.DishMapper;
 import com.xlhl.sky.mapper.admin.SetMealDishMapper;
 import com.xlhl.sky.mapper.admin.SetMealMapper;
@@ -21,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -75,19 +77,21 @@ public class SetMealServiceImpl implements SetMealService {
         SetMeal setMeal = new SetMeal();
         BeanUtils.copyProperties(setMealDTO, setMeal);
 
-        LocalDateTime dateTime = LocalDateTime.now();
-        setMeal.setCreateTime(dateTime);
-        setMeal.setUpdateTime(dateTime);
+        //插入套餐与菜品关联信息
+        int addSetMeal = setMealMapper.insert(setMeal);
 
-        Long currentId = BaseContext.getCurrentId();
-        setMeal.setCreateUser(currentId);
-        setMeal.setUpdateUser(currentId);
+        assert addSetMeal == 1;
 
-        Integer addSetMeal = setMealMapper.addSetMeal(setMeal);
+        List<SetMealDish> setmealDishes = setMealDTO.getSetmealDishes();
 
+        Long setMealId = setMeal.getId();
+        //插入套餐id
+        setmealDishes.forEach(setMealDish -> {
+            setMealDish.setSetmealId(setMealId);
+        });
         //==>新增套餐关联的菜品信息
-        Integer addSetMealDish = setMealDishMapper.addSetMealDish(setMealDTO.getSetmealDishes());
-        assert addSetMeal == 1 && addSetMealDish >= 1;
+        Integer addSetMealDish = setMealDishMapper.addSetMealDish(setmealDishes);
+        assert addSetMealDish >= 1;
     }
 
     /**
@@ -133,9 +137,22 @@ public class SetMealServiceImpl implements SetMealService {
      */
     @Override
     public void updateStatus(Integer status, Long id) {
-        assert status != null || id != null;
+        assert status != null && id != null;
+        if (status.equals(StatusConstant.ENABLE)) {//==>起售套餐内是否存在停售菜品？
+            List<SetMealDish> setMealDishById = setMealDishMapper.getSetMealDishById(id);
+            setMealDishById.forEach(setMealDish -> {
+                Dish dish = dishMapper.queryDishById(setMealDish.getDishId());
+                if (dish.getStatus().equals(StatusConstant.DISABLE)) {//===>存在未起售套餐则抛出异常
+                    throw new SetMealEnableFailedException(MessageConstant.SETMEAL_ENABLE_FAILED);
+                }
+            });
+        }
+        SetMeal setMeal = SetMeal.builder()
+                .id(id)
+                .status(status)
+                .build();
 
-        setMealMapper.updateStatus(status, id);
+        setMealMapper.updateById(setMeal);
     }
 
     /**
@@ -168,11 +185,20 @@ public class SetMealServiceImpl implements SetMealService {
      */
     @Override
     public SetMealVO querySetMealById(Long setMealId) {
+
+//        SetMeal setmeal = setMealMapper.selectById(setMealId);
+//        List<SetMealDish> setMealDishById = setMealDishMapper.getSetMealDishById(setMealId);
+//
+//        SetMealVO setmealVO = new SetMealVO();
+//        BeanUtils.copyProperties(setmeal, setmealVO);
+//        setmealVO.setSetMealDishes(setMealDishById);
         assert setMealId != null;
         //==>查询套餐信息
-        SetMeal setMeal = setMealMapper.querySetMealById(setMealId);
+        SetMeal setMeal = setMealMapper.selectById(setMealId);
+//        SetMeal setMeal = setMealMapper.querySetMealById(setMealId);
 
         assert setMeal != null;
+
         SetMealVO setMealVO = new SetMealVO();
         BeanUtils.copyProperties(setMeal, setMealVO);
 
