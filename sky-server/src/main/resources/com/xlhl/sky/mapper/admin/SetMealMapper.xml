@@ -2,6 +2,57 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xlhl.sky.mapper.admin.SetMealMapper">
+    <insert id="addSetMeal">
+        INSERT INTO SETMEAL (CATEGORY_ID, NAME, PRICE, DESCRIPTION, IMAGE, CREATE_TIME, UPDATE_TIME, CREATE_USER,
+                             UPDATE_USER)
+        VALUES (#{categoryId}, #{name}, #{price}, #{description}, #{image}, #{createTime}, #{updateTime}, #{createUser},
+                #{updateUser})
+    </insert>
+    <update id="updateSetMeal">
+        UPDATE SETMEAL
+        <set>
+            <if test="categoryId!=null">
+                category_id = #{categoryId},
+            </if>
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="price!=null">
+                price = #{price},
+            </if>
+            <if test="status!=null">
+                status = #{status},
+            </if>
+            <if test="description!=null">
+                description = #{description},
+            </if>
+            <if test="image!=null">
+                image = #{image},
+            </if>
+            <if test="updateTime!=null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUser!=null">
+                update_user = #{updateUser},
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+    <update id="updateStatus">
+        UPDATE SETMEAL
+        SET STATUS = #{status}
+        WHERE ID = #{id}
+    </update>
+    <delete id="delSetMealById">
+        DELETE
+        FROM SETMEAL
+        WHERE ID = #{id}
+    </delete>
     <select id="list" parameterType="com.xlhl.sky.entity.SetMeal" resultType="com.xlhl.sky.entity.SetMeal">
         select * from setmeal
         <where>
@@ -15,5 +66,25 @@
                 and status = #{status}
             </if>
         </where>
+    </select>
+    <select id="page" resultType="com.xlhl.sky.vo.SetMealVO">
+        SELECT *
+        FROM SETMEAL
+        <where>
+            <if test="name!=null">
+                and name = #{name}
+            </if>
+            <if test="categoryId!=null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status!=null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+    <select id="querySetMealById" resultType="com.xlhl.sky.entity.SetMeal">
+        SELECT *
+        FROM SETMEAL
+        WHERE ID = {id}
     </select>
 </mapper>

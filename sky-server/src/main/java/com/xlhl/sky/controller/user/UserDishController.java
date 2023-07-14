@@ -26,7 +26,7 @@ public class UserDishController {
     @Resource(name = "dishServiceImpl")
     private DishService dishService;
 
-    @Resource()
+    @Resource
     private RedisTemplate redisTemplate;
 
     /**

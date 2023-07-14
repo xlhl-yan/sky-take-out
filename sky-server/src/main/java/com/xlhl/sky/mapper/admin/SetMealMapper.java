@@ -1,7 +1,12 @@
 package com.xlhl.sky.mapper.admin;
 
+import com.github.pagehelper.Page;
+import com.xlhl.sky.annotation.AutoFill;
+import com.xlhl.sky.dto.SetMealPageQueryDTO;
 import com.xlhl.sky.entity.SetMeal;
+import com.xlhl.sky.enumeration.OperationType;
 import com.xlhl.sky.vo.DishItemVO;
+import com.xlhl.sky.vo.SetMealVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -42,4 +47,53 @@ public interface SetMealMapper {
     @Select("select count(id) from setmeal where category_id = #{categoryId}")
     Integer countByCategoryId(Long id);
 
+    /**
+     * 新增套餐信息
+     *
+     * @param setMeal
+     * @return
+     */
+    @AutoFill(OperationType.INSERT)
+    Integer addSetMeal(SetMeal setMeal);
+
+    /**
+     * 修改套餐信息
+     *
+     * @param setMeal
+     * @return
+     */
+    Integer updateSetMeal(SetMeal setMeal);
+
+    /**
+     * 分页查询套餐信息
+     *
+     * @param setMealPageQueryDTO
+     * @return
+     */
+    Page<SetMealVO> page(SetMealPageQueryDTO setMealPageQueryDTO);
+
+    /**
+     * 修改套餐状态
+     *
+     * @param status
+     * @param id
+     * @return
+     */
+    Integer updateStatus(@Param("status") Integer status,
+                         @Param("id") Long id);
+
+    /**
+     * 批量删除套餐信息
+     *
+     * @param id
+     */
+    void delSetMealById(@Param("id") Long id);
+
+    /**
+     * 根据id查询套餐信息
+     *
+     * @param id
+     * @return
+     */
+    SetMeal querySetMealById(@Param("id") Integer id);
 }
