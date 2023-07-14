@@ -13,7 +13,6 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
-///user/shoppingCart/add
 @RequestMapping("/user/shoppingCart")
 @Slf4j
 @Api(tags = "购物车相关接口")
@@ -22,6 +21,28 @@ public class UserShoppingCartController {
     @Resource(name = "userShoppingCartServiceImpl")
     private UserShoppingCartService userShoppingCartService;
 
+    /**
+     * 删除购物车中一个商品
+     *
+     * @param shoppingCartDTO
+     * @return
+     */
+    @PostMapping("/sub")
+    @ApiOperation(value = "删除购物车中一个商品")
+    public Result delOne(@RequestBody ShoppingCartDTO shoppingCartDTO) {
+        log.info("清除此商品===>{}", shoppingCartDTO);
+
+        userShoppingCartService.delOne(shoppingCartDTO);
+        return Result.success();
+    }
+
+    @DeleteMapping("/clean")
+    @ApiOperation(value = "清空购物车")
+    public Result cleanShoppingCart() {
+        log.info("清空购物车。。。");
+        userShoppingCartService.clean();
+        return Result.success();
+    }
 
     /**
      * 查看购物车信息

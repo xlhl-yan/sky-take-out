@@ -20,4 +20,15 @@ public interface UserShoppingCartService {
      * @return 购物车信息
      */
     List<ShoppingCart> showShoppingCart();
+
+    /**
+     * 清空购物车
+     */
+    void clean();
+
+    /**
+     *
+     * @param shoppingCartDTO
+     */
+    void delOne(ShoppingCartDTO shoppingCartDTO);
 }

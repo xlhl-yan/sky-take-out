@@ -95,4 +95,42 @@ public class UserShoppingCartServiceImpl implements UserShoppingCartService {
                 .build();
         return userShoppingCartMapper.list(build);
     }
+
+    /**
+     * 清空购物车
+     */
+    @Override
+    public void clean() {
+        userShoppingCartMapper.clean(BaseContext.getCurrentId());
+        log.info("已清空购物车。。。");
+    }
+
+    /**
+     * 删除购物车中一个商品
+     *
+     * @param shoppingCartDTO
+     * @return
+     */
+    @Override
+    public void delOne(ShoppingCartDTO shoppingCartDTO) {
+        assert shoppingCartDTO != null;
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
+        shoppingCart.setUserId(BaseContext.getCurrentId());
+
+        List<ShoppingCart> shoppingCarts = userShoppingCartMapper.list(shoppingCart);
+        int size = shoppingCarts.size();
+        assert size == 1;
+        //商品数量是否唯一
+            //正常只会查出一条数据 直接获取第一个值
+        ShoppingCart shoppingCart1 = shoppingCarts.get(size - 1);
+        if (shoppingCart1.getNumber() <= 1) {//===>唯一删 不唯一改
+            userShoppingCartMapper.shoppingCartDecrease(shoppingCart);
+        } else {
+            //==>数量-1
+            shoppingCart1.setNumber(shoppingCart1.getNumber() - 1);
+            userShoppingCartMapper.updateById(shoppingCart1);
+        }
+    }
 }
