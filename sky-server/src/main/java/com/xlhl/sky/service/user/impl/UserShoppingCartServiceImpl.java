@@ -82,4 +82,17 @@ public class UserShoppingCartServiceImpl implements UserShoppingCartService {
             assert insert == 1;
         }
     }
+
+    /**
+     * 查看购物车信息
+     *
+     * @return
+     */
+    @Override
+    public List<ShoppingCart> showShoppingCart() {
+        ShoppingCart build = ShoppingCart.builder()
+                .userId(BaseContext.getCurrentId())
+                .build();
+        return userShoppingCartMapper.list(build);
+    }
 }

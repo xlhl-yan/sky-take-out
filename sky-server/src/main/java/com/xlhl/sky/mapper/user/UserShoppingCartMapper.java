@@ -17,5 +17,4 @@ public interface UserShoppingCartMapper extends BaseMapper<ShoppingCart> {
      * @return
      */
     List<ShoppingCart> list(ShoppingCart shoppingCart);
-
 }

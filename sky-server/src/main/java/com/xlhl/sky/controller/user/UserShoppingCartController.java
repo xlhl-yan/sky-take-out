@@ -1,6 +1,7 @@
 package com.xlhl.sky.controller.user;
 
 import com.xlhl.sky.dto.ShoppingCartDTO;
+import com.xlhl.sky.entity.ShoppingCart;
 import com.xlhl.sky.result.Result;
 import com.xlhl.sky.service.user.UserShoppingCartService;
 import io.swagger.annotations.Api;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 ///user/shoppingCart/add
@@ -24,14 +26,15 @@ public class UserShoppingCartController {
     /**
      * 查看购物车信息
      *
-     * @return
+     * @return 购物车信息
      */
-    @GetMapping
+    @GetMapping("/list")
     @ApiOperation(value = "查看购物车信息")
-    public Result list() {
+    public Result<List<ShoppingCart>> list() {
+        log.info("正在查询购物车内所有的内容");
 
-        //ShoppingCart
-        return Result.success();
+        List<ShoppingCart> shoppingCartList = userShoppingCartService.showShoppingCart();
+        return Result.success(shoppingCartList);
     }
 
     /**
