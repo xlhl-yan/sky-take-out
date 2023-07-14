@@ -6,6 +6,7 @@ import com.xlhl.sky.dto.SetMealPageQueryDTO;
 import com.xlhl.sky.entity.SetMeal;
 import com.xlhl.sky.result.PageResult;
 import com.xlhl.sky.vo.DishItemVO;
+import com.xlhl.sky.vo.SetMealVO;
 
 import java.util.List;
 
@@ -67,8 +68,8 @@ public interface SetMealService {
     /**
      * 根据id查询套餐信息
      *
-     * @param id
+     * @param setMealId
      * @return
      */
-    SetMeal querySetMealById(Integer id);
+    SetMealVO querySetMealById(Long setMealId);
 }

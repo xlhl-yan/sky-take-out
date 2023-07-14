@@ -85,6 +85,6 @@
     <select id="querySetMealById" resultType="com.xlhl.sky.entity.SetMeal">
         SELECT *
         FROM SETMEAL
-        WHERE ID = {id}
+        WHERE ID = #{id}
     </select>
 </mapper>

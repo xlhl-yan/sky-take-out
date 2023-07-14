@@ -1,6 +1,8 @@
 package com.xlhl.sky.mapper.admin;
 
+import com.xlhl.sky.entity.SetMealDish;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,4 +17,27 @@ public interface SetMealDishMapper {
      * @return
      */
     List<Long> getSetMealIdsByIds(List<Long> dishIds);
+
+    /**
+     * 新增套餐关联的菜品信息
+     *
+     * @param setMealDishes
+     * @return
+     */
+    Integer addSetMealDish(List<SetMealDish> setMealDishes);
+
+    /**
+     * 根据套餐id查询菜品信息
+     *
+     * @param setMealId
+     * @return
+     */
+    List<SetMealDish> getSetMealDishById(@Param("setMealId") Long setMealId);
+
+    /**
+     * 根据套餐id删除关联信息
+     *
+     * @param setMealId
+     */
+    Integer delSetMealDishBySetMealId(@Param("setMealId") Long setMealId);
 }

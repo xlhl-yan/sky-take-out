@@ -1,10 +1,9 @@
 package com.xlhl.sky.mapper.admin;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.pagehelper.Page;
-import com.xlhl.sky.annotation.AutoFill;
 import com.xlhl.sky.dto.SetMealPageQueryDTO;
 import com.xlhl.sky.entity.SetMeal;
-import com.xlhl.sky.enumeration.OperationType;
 import com.xlhl.sky.vo.DishItemVO;
 import com.xlhl.sky.vo.SetMealVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,7 +15,7 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface SetMealMapper {
+public interface SetMealMapper extends BaseMapper<SetMeal> {
 
     /*/
      * 动态条件查询套餐
@@ -53,7 +52,6 @@ public interface SetMealMapper {
      * @param setMeal
      * @return
      */
-    @AutoFill(OperationType.INSERT)
     Integer addSetMeal(SetMeal setMeal);
 
     /**
@@ -95,5 +93,5 @@ public interface SetMealMapper {
      * @param id
      * @return
      */
-    SetMeal querySetMealById(@Param("id") Integer id);
+    SetMeal querySetMealById(@Param("id") Long id);
 }

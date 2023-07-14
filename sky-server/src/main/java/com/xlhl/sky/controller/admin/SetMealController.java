@@ -7,6 +7,7 @@ import com.xlhl.sky.entity.SetMeal;
 import com.xlhl.sky.result.PageResult;
 import com.xlhl.sky.result.Result;
 import com.xlhl.sky.service.admin.SetMealService;
+import com.xlhl.sky.vo.SetMealVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class SetMealController {
      * @return
      */
     @GetMapping("/list")
-    @Cacheable(cacheNames = "SetMealCache", key = "#categoryId")
+    @Cacheable(cacheNames = "SetMealCategoryCache", key = "#categoryId")
     @ApiOperation(value = "根据分类id查询套餐信息")
     public Result<List<SetMeal>> list(Long categoryId) {
         log.info("查询此分类套餐==>{}", categoryId);
@@ -46,17 +47,17 @@ public class SetMealController {
     }
 
     /**
-     * 根据id查询套餐信息
+     * 根据套餐id查询套餐信息
      *
-     * @param id
+     * @param setMealId
      * @return
      */
     @GetMapping("/{id}")
-    @ApiOperation(value = "根据id查询套餐信息")
-    @Cacheable(cacheNames = "SetMealCache", key = "#id")
-    public Result<SetMeal> querySetMealById(@PathVariable("id") Integer id) {
-        log.info("查询套餐信息id==>{}", id);
-        SetMeal setMeal = setMealService.querySetMealById(id);
+    @ApiOperation(value = "根据套餐id查询套餐信息")
+    @Cacheable(cacheNames = "SetMealCache", key = "#setMealId")
+    public Result<SetMealVO> querySetMealById(@PathVariable("id") Long setMealId) {
+        log.info("查询套餐信息id==>{}", setMealId);
+        SetMealVO setMeal = setMealService.querySetMealById(setMealId);
 
         return Result.success(setMeal);
     }
@@ -67,9 +68,12 @@ public class SetMealController {
      * @param ids
      * @return
      */
-    @GetMapping
+    @DeleteMapping
     @ApiOperation(value = "批量删除单个或多个套餐")
-    @CacheEvict(cacheNames = "SetMealCache", allEntries = true)
+    @CacheEvict(cacheNames = {
+            "SetMealCategoryCache",
+            "SetMealCachePage",
+            "SetMealCache"}, allEntries = true)
     public Result delSetMealById(@RequestParam List<Long> ids) {
         log.info("批量删除菜品id:{}", ids);
 
@@ -87,7 +91,10 @@ public class SetMealController {
      */
     @PostMapping("/status/{status}")
     @ApiOperation(value = "修改套餐状态 1：起售 0：停售")
-    @CacheEvict(cacheNames = "SetMealCache", key = "#id")
+    @CacheEvict(cacheNames = {
+            "SetMealCache",
+            "SetMealCachePage",
+            "SetMealCategoryCache"}, allEntries = true)
     public Result updateStatus(@PathVariable("status") Integer status, Long id) {
         setMealService.updateStatus(status, id);
         return Result.success();
@@ -101,7 +108,7 @@ public class SetMealController {
      */
     @GetMapping("/page")
     @ApiOperation(value = "分页查询套餐信息")
-    @Cacheable(cacheNames = "SetMealCache", key = "#setMealPageQueryDTO.page")
+    @Cacheable(cacheNames = "SetMealCachePage", key = "#setMealPageQueryDTO.page")
     public Result<PageResult> page(SetMealPageQueryDTO setMealPageQueryDTO) {
         log.info("分页查询套餐信息。。。");
         PageResult page = setMealService.page(setMealPageQueryDTO);
@@ -133,7 +140,10 @@ public class SetMealController {
      */
     @PostMapping
     @ApiOperation(value = "新增套餐信息")
-    @CachePut(cacheNames = "SetMealCache", key = "#setMealDTO.id")
+    @CacheEvict(cacheNames = {
+            "SetMealCache",
+            "SetMealCachePage",
+            "SetMealCategoryCache"}, allEntries = true)
     public Result addSetMeal(@RequestBody SetMealDTO setMealDTO) {
         log.info("新增套餐为==>{}", setMealDTO);
 

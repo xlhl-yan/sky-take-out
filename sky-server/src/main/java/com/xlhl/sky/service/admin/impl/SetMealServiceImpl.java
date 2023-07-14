@@ -1,10 +1,13 @@
 package com.xlhl.sky.service.admin.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xlhl.sky.context.BaseContext;
 import com.xlhl.sky.dto.SetMealDTO;
 import com.xlhl.sky.dto.SetMealPageQueryDTO;
 import com.xlhl.sky.entity.SetMeal;
+import com.xlhl.sky.entity.SetMealDish;
 import com.xlhl.sky.mapper.admin.DishMapper;
 import com.xlhl.sky.mapper.admin.SetMealDishMapper;
 import com.xlhl.sky.mapper.admin.SetMealMapper;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -64,11 +68,26 @@ public class SetMealServiceImpl implements SetMealService {
     public void addSetMeal(SetMealDTO setMealDTO) {
         assert setMealDTO != null;
 
+        //==>新增套餐是否存在？
+        SetMeal selectOne = setMealMapper.selectOne(new QueryWrapper<SetMeal>().eq("name", setMealDTO.getName()));
+        assert selectOne == null;
+
         SetMeal setMeal = new SetMeal();
         BeanUtils.copyProperties(setMealDTO, setMeal);
 
-        Integer integer = setMealMapper.addSetMeal(setMeal);
-        assert integer == 1;
+        LocalDateTime dateTime = LocalDateTime.now();
+        setMeal.setCreateTime(dateTime);
+        setMeal.setUpdateTime(dateTime);
+
+        Long currentId = BaseContext.getCurrentId();
+        setMeal.setCreateUser(currentId);
+        setMeal.setUpdateUser(currentId);
+
+        Integer addSetMeal = setMealMapper.addSetMeal(setMeal);
+
+        //==>新增套餐关联的菜品信息
+        Integer addSetMealDish = setMealDishMapper.addSetMealDish(setMealDTO.getSetmealDishes());
+        assert addSetMeal == 1 && addSetMealDish >= 1;
     }
 
     /**
@@ -129,23 +148,37 @@ public class SetMealServiceImpl implements SetMealService {
     public void delSetMealById(List<Long> ids) {
         assert ids.size() > 0;
 
+
         ids.forEach(id -> {
+            //==>删除套餐信息
             setMealMapper.delSetMealById(id);
+
+            //==>删除套餐关联菜品的信息
+            setMealDishMapper.delSetMealDishBySetMealId(id);
         });
+
+
     }
 
     /**
-     * 根据id查询套餐信息
+     * 根据套餐id查询套餐信息
      *
-     * @param id
+     * @param setMealId
      * @return
      */
     @Override
-    public SetMeal querySetMealById(Integer id) {
-        assert id != null;
-        SetMeal setMeal = setMealMapper.querySetMealById(id);
+    public SetMealVO querySetMealById(Long setMealId) {
+        assert setMealId != null;
+        //==>查询套餐信息
+        SetMeal setMeal = setMealMapper.querySetMealById(setMealId);
 
         assert setMeal != null;
-        return setMeal;
+        SetMealVO setMealVO = new SetMealVO();
+        BeanUtils.copyProperties(setMeal, setMealVO);
+
+        //==>查询套餐关联的菜品信息
+        List<SetMealDish> setMealDishList = setMealDishMapper.getSetMealDishById(setMealId);
+        setMealVO.setSetMealDishes(setMealDishList);
+        return setMealVO;
     }
 }
