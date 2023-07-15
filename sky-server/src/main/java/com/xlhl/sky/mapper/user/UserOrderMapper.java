@@ -18,10 +18,17 @@ public interface UserOrderMapper extends BaseMapper<Orders> {
     @Select("select * from orders where number = #{orderNumber}")
     Orders getByNumber(String orderNumber);
 
-    /**
-     * 修改订单信息
-     *
-     * @param orders
-     */
-    void update(Orders orders);
+//    /**
+//     * 修改订单信息
+//     *
+//     * @param orders
+//     */
+//    void update(Orders orders);
+//
+//    /**
+//     * 根据id修改订单信息
+//     *
+//     * @param orders
+//     */
+//    void updateOrders(Orders orders);
 }

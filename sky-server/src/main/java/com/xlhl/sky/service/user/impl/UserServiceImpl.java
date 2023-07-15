@@ -21,7 +21,7 @@ import java.util.HashMap;
 @Transactional
 @Slf4j
 public class UserServiceImpl implements UserService {
-    @Resource(name = "userMapper")
+    @Resource
     private UserMapper userMapper;
 
     @Resource(name = "weChatProperties")

@@ -71,6 +71,7 @@ public class UserOrderServiceImpl implements UserOrderService {
         Long uid = BaseContext.getCurrentId();
         wrapper.eq("user_id", uid);
         List<ShoppingCart> shoppingCartList = shoppingCartMapper.selectList(wrapper);
+
         if (shoppingCartList == null || shoppingCartList.size() <= 0) {
             throw new ShoppingCartBusinessException(MessageConstant.SHOPPING_CART_IS_NULL);
         }
@@ -168,6 +169,6 @@ public class UserOrderServiceImpl implements UserOrderService {
                 .checkoutTime(LocalDateTime.now())
                 .build();
 
-        orderMapper.update(orders);
+        orderMapper.updateById(orders);
     }
 }
