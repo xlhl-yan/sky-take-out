@@ -72,7 +72,7 @@
         FROM SETMEAL
         <where>
             <if test="name!=null">
-                and name = #{name}
+                and name like concat('%',#{name},'%')
             </if>
             <if test="categoryId!=null">
                 and category_id = #{categoryId}
@@ -85,6 +85,6 @@
     <select id="querySetMealById" resultType="com.xlhl.sky.entity.SetMeal">
         SELECT *
         FROM SETMEAL
-        WHERE id = #{id}
+        WHERE ID = #{id}
     </select>
 </mapper>

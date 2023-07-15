@@ -82,15 +82,15 @@ public class SetMealServiceImpl implements SetMealService {
 
         assert addSetMeal == 1;
 
-        List<SetMealDish> setmealDishes = setMealDTO.getSetmealDishes();
+        List<SetMealDish> setMealDishes = setMealDTO.getSetmealDishes();
 
         Long setMealId = setMeal.getId();
         //插入套餐id
-        setmealDishes.forEach(setMealDish -> {
+        setMealDishes.forEach(setMealDish -> {
             setMealDish.setSetmealId(setMealId);
         });
         //==>新增套餐关联的菜品信息
-        Integer addSetMealDish = setMealDishMapper.addSetMealDish(setmealDishes);
+        Integer addSetMealDish = setMealDishMapper.addSetMealDish(setMealDishes);
         assert addSetMealDish >= 1;
     }
 
@@ -125,7 +125,7 @@ public class SetMealServiceImpl implements SetMealService {
         PageHelper.startPage(setMealPageQueryDTO.getPage(), setMealPageQueryDTO.getPageSize());
         Page<SetMealVO> page = setMealMapper.page(setMealPageQueryDTO);
 
-
+        log.info("套餐数据为==>{}", page.getResult());
         return new PageResult(page.getTotal(), page.getResult());
     }
 

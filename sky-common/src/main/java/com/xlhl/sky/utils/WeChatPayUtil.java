@@ -24,10 +24,7 @@ import java.math.BigDecimal;
 import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 /**
  * 微信支付工具类
@@ -60,7 +57,7 @@ public class WeChatPayUtil {
 
             //weChatPayCertificates微信支付平台证书列表。你也可以使用后面章节提到的“定时更新平台证书功能”
             //而不需要关心平台证书的来龙去脉
-            List<X509Certificate> weChatPayCertificates = Arrays.asList(x509Certificate);
+            List<X509Certificate> weChatPayCertificates = Collections.singletonList(x509Certificate);
 
             WechatPayHttpClientBuilder builder = WechatPayHttpClientBuilder.create()
                     .withMerchant(weChatProperties.getMchid(), weChatProperties.getMchSerialNo(), merchantPrivateKey)
@@ -90,10 +87,10 @@ public class WeChatPayUtil {
         httpPost.addHeader("Wechatpay-Serial", weChatProperties.getMchSerialNo());
         httpPost.setEntity(new StringEntity(body, "UTF-8"));
 
+        assert httpClient != null;
         CloseableHttpResponse response = httpClient.execute(httpPost);
         try {
-            String bodyAsString = EntityUtils.toString(response.getEntity());
-            return bodyAsString;
+            return EntityUtils.toString(response.getEntity());
         } finally {
             httpClient.close();
             response.close();
@@ -114,10 +111,10 @@ public class WeChatPayUtil {
         httpGet.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString());
         httpGet.addHeader("Wechatpay-Serial", weChatProperties.getMchSerialNo());
 
+        assert httpClient != null;
         CloseableHttpResponse response = httpClient.execute(httpGet);
         try {
-            String bodyAsString = EntityUtils.toString(response.getEntity());
-            return bodyAsString;
+            return EntityUtils.toString(response.getEntity());
         } finally {
             httpClient.close();
             response.close();

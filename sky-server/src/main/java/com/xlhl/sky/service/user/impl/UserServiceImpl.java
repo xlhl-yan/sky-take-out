@@ -27,6 +27,12 @@ public class UserServiceImpl implements UserService {
     @Resource(name = "weChatProperties")
     private WeChatProperties weChatProperties;
 
+    /**
+     * 微信登录
+     *
+     * @param userLoginDTO
+     * @return
+     */
     @Override
     public User weChatLogin(UserLoginDTO userLoginDTO) {
         assert userLoginDTO != null;

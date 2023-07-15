@@ -1,7 +1,9 @@
 package com.xlhl.sky.service.user;
 
 
+import com.xlhl.sky.dto.OrdersPaymentDTO;
 import com.xlhl.sky.dto.OrdersSubmitDTO;
+import com.xlhl.sky.vo.OrderPaymentVO;
 import com.xlhl.sky.vo.OrderSubmitVO;
 
 public interface UserOrderService {
@@ -12,4 +14,19 @@ public interface UserOrderService {
      * @return
      */
     OrderSubmitVO submitOrder(OrdersSubmitDTO ordersSubmitDTO);
+
+    /**
+     * 订单支付
+     *
+     * @param ordersPaymentDTO
+     * @return
+     */
+    OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) throws Exception;
+
+    /**
+     * 支付成功，修改订单状态
+     *
+     * @param outTradeNo
+     */
+    void paySuccess(String outTradeNo);
 }

@@ -1,21 +1,20 @@
 package com.xlhl.sky.service.user.impl;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xlhl.sky.constant.MessageConstant;
 import com.xlhl.sky.context.BaseContext;
+import com.xlhl.sky.dto.OrdersPaymentDTO;
 import com.xlhl.sky.dto.OrdersSubmitDTO;
-import com.xlhl.sky.entity.AddressBook;
-import com.xlhl.sky.entity.OrderDetail;
-import com.xlhl.sky.entity.Orders;
-import com.xlhl.sky.entity.ShoppingCart;
+import com.xlhl.sky.entity.*;
 import com.xlhl.sky.exception.AddressBookBusinessException;
+import com.xlhl.sky.exception.OrderBusinessException;
 import com.xlhl.sky.exception.ShoppingCartBusinessException;
-import com.xlhl.sky.mapper.user.UserAddressBookMapper;
-import com.xlhl.sky.mapper.user.UserOrderDetailMapper;
-import com.xlhl.sky.mapper.user.UserOrderMapper;
-import com.xlhl.sky.mapper.user.UserShoppingCartMapper;
+import com.xlhl.sky.mapper.user.*;
 import com.xlhl.sky.service.user.UserOrderService;
+import com.xlhl.sky.utils.WeChatPayUtil;
+import com.xlhl.sky.vo.OrderPaymentVO;
 import com.xlhl.sky.vo.OrderSubmitVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -23,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,17 +32,23 @@ import java.util.List;
 @Transactional
 public class UserOrderServiceImpl implements UserOrderService {
 
-    @Resource(name = "userOrderMapper")
+    @Resource
     private UserOrderMapper orderMapper;
 
-    @Resource(name = "userOrderDetailMapper")
+    @Resource
     private UserOrderDetailMapper orderDetailMapper;
 
-    @Resource(name = "userShoppingCartMapper")
+    @Resource
     private UserShoppingCartMapper shoppingCartMapper;
 
-    @Resource(name = "userAddressBookMapper")
+    @Resource
     private UserAddressBookMapper addressBookMapper;
+
+    @Resource
+    private UserMapper userMapper;
+
+    @Resource
+    private WeChatPayUtil weChatPayUtil;
 
     /**
      * 用户下单
@@ -114,5 +120,54 @@ public class UserOrderServiceImpl implements UserOrderService {
                 .orderNumber(orderCode)
                 .orderAmount(orders.getAmount())
                 .build();
+    }
+
+    /**
+     * 订单支付
+     *
+     * @param ordersPaymentDTO
+     * @return
+     */
+    public OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) throws Exception {
+        // 当前登录用户id
+        Long userId = BaseContext.getCurrentId();
+        User user = userMapper.selectById(userId);
+
+        //调用微信支付接口，生成预支付交易单
+        JSONObject jsonObject = weChatPayUtil.pay(
+                ordersPaymentDTO.getOrderNumber(), //商户订单号
+                new BigDecimal("0.01"), //支付金额，单位 元
+                "苍穹外卖订单", //商品描述
+                user.getOpenid() //微信用户的openid
+        );
+
+        if (jsonObject.getString("code") != null && jsonObject.getString("code").equals("ORDERPAID")) {
+            throw new OrderBusinessException("该订单已支付");
+        }
+        OrderPaymentVO vo = jsonObject.toJavaObject(OrderPaymentVO.class);
+        vo.setPackageStr(jsonObject.getString("package"));
+
+        return vo;
+    }
+
+    /**
+     * 支付成功，修改订单状态
+     *
+     * @param outTradeNo
+     */
+    public void paySuccess(String outTradeNo) {
+
+        // 根据订单号查询订单
+        Orders ordersDB = orderMapper.getByNumber(outTradeNo);
+
+        // 根据订单id更新订单的状态、支付方式、支付状态、结账时间
+        Orders orders = Orders.builder()
+                .id(ordersDB.getId())
+                .status(Orders.TO_BE_CONFIRMED)
+                .payStatus(Orders.PAID)
+                .checkoutTime(LocalDateTime.now())
+                .build();
+
+        orderMapper.update(orders);
     }
 }
