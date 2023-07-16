@@ -1,6 +1,7 @@
 package com.xlhl.sky.service.user.impl;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xlhl.sky.constant.MessageConstant;
@@ -16,6 +17,7 @@ import com.xlhl.sky.service.user.UserOrderService;
 import com.xlhl.sky.utils.WeChatPayUtil;
 import com.xlhl.sky.vo.OrderPaymentVO;
 import com.xlhl.sky.vo.OrderSubmitVO;
+import com.xlhl.sky.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,9 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -49,6 +53,9 @@ public class UserOrderServiceImpl implements UserOrderService {
 
     @Resource
     private WeChatPayUtil weChatPayUtil;
+
+    @Resource
+    private WebSocketServer webSocketServer;
 
     /**
      * 用户下单
@@ -170,5 +177,16 @@ public class UserOrderServiceImpl implements UserOrderService {
                 .build();
 
         orderMapper.updateById(orders);
+
+        //通过webSocket向可以护短推送消息 type orderId content
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", 1);//==> 1：表示来单提醒 2：用户催单
+        map.put("orderId", orders.getId());//==> 获取订单id
+        map.put("content", "订单号：" + outTradeNo);//==> 推送内容
+
+        String json = JSON.toJSONString(map);//==> 转JSON格式
+        webSocketServer.sendToAllClient(json);//==> 推送消息
+
     }
 }
