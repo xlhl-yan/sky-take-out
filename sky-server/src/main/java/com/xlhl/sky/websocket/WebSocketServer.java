@@ -1,5 +1,6 @@
 package com.xlhl.sky.websocket;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.OnClose;
@@ -65,6 +66,33 @@ public class WebSocketServer {
                 session.getBasicRemote().sendText(message);
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 群发
+     *
+     * @param type    发送类型 催单 or 接单
+     * @param orderId 订单id
+     * @param content 推送内容
+     */
+    public void sendToAllClient(int type, Long orderId, String content) {
+        Collection<Session> sessions = sessionMap.values();
+        HashMap<String, Object> map = new HashMap<>();
+        for (Session session : sessions) {
+            try {
+                map.put("type", type);//==> 1：表示来单提醒 2：用户催单
+                map.put("orderId", orderId);//==> 获取订单id
+                map.put("content", "订单号：" + content);//==> 推送内容
+
+                String json = JSON.toJSONString(map);//==> 转JSON格式
+                //服务器向客户端发送消息
+                session.getBasicRemote().sendText(json);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                map.clear();
             }
         }
     }

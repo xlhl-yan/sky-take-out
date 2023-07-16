@@ -23,6 +23,25 @@ public class UserOrderController {
     @Resource(name = "userOrderServiceImpl")
     private UserOrderService orderService;
 
+    @Resource(name = "userOrderServiceImpl")
+    private UserOrderService orderServiceImpl;
+
+
+    /**
+     * 用户催单
+     *
+     * @param orderId
+     * @return
+     */
+    @GetMapping("/reminder/{id}")
+    @ApiOperation(value = "用户催单")
+    public Result reminder(@PathVariable("id") Long orderId) {
+        log.info("客户已催单==>{}，请尽快接单", orderId);
+
+        orderService.reminder(orderId);
+        return Result.success();
+    }
+
     /**
      * 用户下单
      *
