@@ -2,7 +2,9 @@ package com.xlhl.sky.controller.admin;
 
 import com.xlhl.sky.result.Result;
 import com.xlhl.sky.service.admin.ReportService;
+import com.xlhl.sky.vo.OrderReportVO;
 import com.xlhl.sky.vo.TurnoverReportVO;
+import com.xlhl.sky.vo.UserReportVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +28,50 @@ public class ReportController {
     @Resource(name = "reportServiceImpl")
     private ReportService reportService;
 
+
     /**
-     * 营业额统计
+     * 指定时间订单统计
+     * /admin/report/ordersStatistics
+     *
+     * @param begin
+     * @param end
+     * @return
+     */
+    @GetMapping("/ordersStatistics")
+    @ApiOperation(value = "订单统计")
+    public Result<OrderReportVO> ordersStatistics(
+            //时间格式转换
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+        log.info("正在查询订单信息 {}===> {}", begin, end);
+
+        OrderReportVO orderReportVO = reportService.getOrdersStatistics(begin, end);
+        return Result.success(orderReportVO);
+    }
+
+    /**
+     * 指定时间用户统计
+     * /admin/report/userStatistics
+     *
+     * @param begin
+     * @param end
+     * @return
+     */
+    @GetMapping("/userStatistics")
+    @ApiOperation(value = "用户数据统计")
+    public Result<UserReportVO> userStatistics(
+            //时间格式转换
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+        log.info("正在查询用户信息 {}===> {}", begin, end);
+
+        UserReportVO userReportVO = reportService.getUserStatistics(begin, end);
+        return Result.success(userReportVO);
+    }
+
+    /**
+     * 指定时间营业额统计
+     * /admin/report/admin/report
      *
      * @param begin
      * @param end
