@@ -188,6 +188,11 @@ public class UserOrderServiceImpl implements UserOrderService {
 
     }
 
+    /**
+     * 用户催单
+     *
+     * @param orderId
+     */
     @Override
     public void reminder(Long orderId) {
         assert orderId != null;
@@ -195,7 +200,7 @@ public class UserOrderServiceImpl implements UserOrderService {
         //==>校验订单信息
         Orders orders = verifyOrders(orderId);
 
-        // 发送消息 提醒接单
+        // 发送消息 用户已催单
         webSocketServer.sendToAllClient(OrderTypeConstant.REMINDER, orderId, orders.getNumber());
     }
 
