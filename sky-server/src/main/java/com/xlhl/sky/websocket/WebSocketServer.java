@@ -56,7 +56,7 @@ public class WebSocketServer {
     /**
      * 群发
      *
-     * @param message
+     * @param message 推送内容
      */
     public void sendToAllClient(String message) {
         Collection<Session> sessions = sessionMap.values();

@@ -11,4 +11,20 @@
             AND STATUS = #{status}
         </if>
     </select>
+
+    <select id="sumByMap" resultType="java.lang.Double">
+        SELECT sum(AMOUNT)
+        FROM ORDERS
+        <where>
+            <if test="begin != null">
+                AND order_time &gt; #{begin}
+            </if>
+            <if test="end != null">
+                AND order_time &lt; #{end}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.util.Map;
+
 @Repository
 @Mapper
 public interface UserOrderMapper extends BaseMapper<Orders> {
@@ -28,17 +30,12 @@ public interface UserOrderMapper extends BaseMapper<Orders> {
      */
     Page<Orders> list(OrdersPageQueryDTO ordersPageQueryDTO);
 
-//    /**
-//     * 修改订单信息
-//     *
-//     * @param orders
-//     */
-//    void update(Orders orders);
-//
-//    /**
-//     * 根据id修改订单信息
-//     *
-//     * @param orders
-//     */
-//    void updateOrders(Orders orders);
+    /**
+     * 根据动态条件统计营业额
+     *
+     * @param map
+     * @return
+     */
+    Double sumByMap(Map<String, Object> map);
+
 }
