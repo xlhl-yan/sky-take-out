@@ -3,9 +3,13 @@ package com.xlhl.sky.service.user.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.xlhl.sky.constant.MessageConstant;
 import com.xlhl.sky.constant.OrderTypeConstant;
 import com.xlhl.sky.context.BaseContext;
+import com.xlhl.sky.dto.OrdersCancelDTO;
+import com.xlhl.sky.dto.OrdersPageQueryDTO;
 import com.xlhl.sky.dto.OrdersPaymentDTO;
 import com.xlhl.sky.dto.OrdersSubmitDTO;
 import com.xlhl.sky.entity.*;
@@ -13,10 +17,12 @@ import com.xlhl.sky.exception.AddressBookBusinessException;
 import com.xlhl.sky.exception.OrderBusinessException;
 import com.xlhl.sky.exception.ShoppingCartBusinessException;
 import com.xlhl.sky.mapper.user.*;
+import com.xlhl.sky.result.PageResult;
 import com.xlhl.sky.service.user.UserOrderService;
 import com.xlhl.sky.utils.WeChatPayUtil;
 import com.xlhl.sky.vo.OrderPaymentVO;
 import com.xlhl.sky.vo.OrderSubmitVO;
+import com.xlhl.sky.vo.OrderVO;
 import com.xlhl.sky.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -187,12 +193,147 @@ public class UserOrderServiceImpl implements UserOrderService {
         assert orderId != null;
 
         //==>校验订单信息
-        Orders orders = orderMapper.selectById(orderId);
-        if (orders == null) {
-            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
-        }
+        Orders orders = verifyOrders(orderId);
 
         // 发送消息 提醒接单
         webSocketServer.sendToAllClient(OrderTypeConstant.REMINDER, orderId, orders.getNumber());
+    }
+
+    /**
+     * 用户取消订单
+     *
+     * @param ordersCancelDTO
+     */
+    @Override
+    public void cancelOrder(OrdersCancelDTO ordersCancelDTO) {
+        assert ordersCancelDTO.getId() != null;
+
+        //校验订单是否存在
+        Orders orders = verifyOrders(ordersCancelDTO.getId());
+
+        orders.setStatus(Orders.CANCELLED);//==> 修改状态
+        orders.setCancelTime(LocalDateTime.now());//==> 取消时间
+        orders.setCancelReason(ordersCancelDTO.getCancelReason());//==> 取消原因
+        //修改订单信息
+        orderMapper.updateById(orders);
+    }
+
+    /**
+     * 根据id查询订单信息
+     *
+     * @param orderId
+     * @return
+     */
+    @Override
+    public OrderVO orderDetail(Long orderId) {
+        //校验订单
+        Orders orders = verifyOrders(orderId);
+
+        //查询订单详情
+        List<OrderDetail> orderDetailList = orderDetailMapper.selectList(
+                new QueryWrapper<OrderDetail>().eq("order_id", orderId)
+        );
+
+        assert orderDetailList.size() >= 1;
+
+        //封装数据
+        OrderVO orderVO = new OrderVO();
+        BeanUtils.copyProperties(orders, orderVO);
+        orderVO.setOrderDetailList(orderDetailList);
+
+        return orderVO;
+    }
+
+    /**
+     * 再来一单
+     *
+     * @return
+     */
+    @Override
+    public void repetition(Long orderId) {
+        //校验订单
+        Orders orders = verifyOrders(orderId);
+
+        //根据订单信息将数据放置购物车中
+        List<OrderDetail> orderDetailList = orderDetailMapper.selectList(
+                new QueryWrapper<OrderDetail>()
+                        .eq("order_id", orderId)
+        );
+
+        ArrayList<ShoppingCart> shoppingCarts = new ArrayList<>();
+        orderDetailList.forEach(orderDetail -> {
+            ShoppingCart shoppingCart = new ShoppingCart();
+
+            // 将原订单详情里面的菜品信息重新复制到购物车对象中 购物车自增id 忽略id
+            BeanUtils.copyProperties(orderDetail, shoppingCart, "id");
+            shoppingCart.setUserId(orders.getUserId());
+            shoppingCart.setCreateTime(LocalDateTime.now());
+
+            shoppingCarts.add(shoppingCart);
+        });
+
+        //购物车对象批量添加至数据库
+        shoppingCartMapper.insertBatch(shoppingCarts);
+    }
+
+    /**
+     * 分页查询历史订单查询
+     *
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult historyOrders(OrdersPageQueryDTO ordersPageQueryDTO) {
+
+        ordersPageQueryDTO.setUserId(BaseContext.getCurrentId());
+
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+        Page<Orders> ordersPage = orderMapper.list(ordersPageQueryDTO);
+
+        //创建返回体
+        List<OrderVO> list = new ArrayList<>();
+
+        if (ordersPage.size() >= 1) {
+            //根据每个订单对应的id查找 订单详情
+            ordersPage.forEach(orders -> {
+                Long ordersId = orders.getId();//订单id
+                //查找订单详情
+                List<OrderDetail> orderDetailList = orderDetailMapper.selectList(
+                        new QueryWrapper<OrderDetail>()
+                                .eq("order_id", ordersId)
+                );
+
+                //==> 数据拷贝
+                OrderVO orderVO = new OrderVO();
+                BeanUtils.copyProperties(orders, orderVO);
+                orderVO.setOrderDetailList(orderDetailList);
+
+                // 数据封装
+                list.add(orderVO);
+            });
+        }
+
+        return new PageResult(ordersPage.getTotal(), list);
+    }
+
+    /**
+     * 校验订单是否存在
+     *
+     * @param orderId 订单id
+     * @return 订单信息
+     */
+    private Orders verifyOrders(Long orderId) {
+        assert orderId != null;
+        //查询该用户该订单详情
+        Long userId = BaseContext.getCurrentId();
+        Orders orders = orderMapper.selectOne(
+                new QueryWrapper<Orders>()
+                        .eq("user_id", userId)
+                        .eq("id", orderId));
+        //校验订单
+        if (orders == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        return orders;
     }
 }

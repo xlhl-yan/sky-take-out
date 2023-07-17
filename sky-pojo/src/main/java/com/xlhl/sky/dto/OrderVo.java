@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class OrdersDTO implements Serializable {
+public class OrderVo implements Serializable {
 
     private Long id;
 
@@ -50,6 +50,7 @@ public class OrdersDTO implements Serializable {
 
     //收货人
     private String consignee;
+
 
     private List<OrderDetail> orderDetails;
 

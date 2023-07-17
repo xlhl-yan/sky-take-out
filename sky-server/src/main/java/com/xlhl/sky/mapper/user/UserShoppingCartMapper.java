@@ -34,4 +34,11 @@ public interface UserShoppingCartMapper extends BaseMapper<ShoppingCart> {
      * @return
      */
     Integer shoppingCartDecrease(ShoppingCart shoppingCart);
+
+    /**
+     * 批量添加购物车对象至数据库
+     *
+     * @param shoppingCartList
+     */
+    void insertBatch(List<ShoppingCart> shoppingCartList);
 }

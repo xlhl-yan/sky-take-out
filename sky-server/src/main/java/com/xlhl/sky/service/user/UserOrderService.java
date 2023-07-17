@@ -1,10 +1,11 @@
 package com.xlhl.sky.service.user;
 
 
-import com.xlhl.sky.dto.OrdersPaymentDTO;
-import com.xlhl.sky.dto.OrdersSubmitDTO;
+import com.xlhl.sky.dto.*;
+import com.xlhl.sky.result.PageResult;
 import com.xlhl.sky.vo.OrderPaymentVO;
 import com.xlhl.sky.vo.OrderSubmitVO;
+import com.xlhl.sky.vo.OrderVO;
 
 public interface UserOrderService {
     /**
@@ -36,4 +37,34 @@ public interface UserOrderService {
      * @param orderId
      */
     void reminder(Long orderId);
+
+    /**
+     * 用户取消订单
+     *
+     * @param ordersCancelDTO
+     */
+    void cancelOrder(OrdersCancelDTO ordersCancelDTO);
+
+    /**
+     * 根据id查询订单信息
+     *
+     * @param orderId
+     * @return
+     */
+    OrderVO orderDetail(Long orderId);
+
+    /**
+     * 再来一单
+     *
+     * @return
+     */
+    void repetition(Long orderId);
+
+    /**
+     * 分页查询历史订单查询
+     *
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    PageResult historyOrders(OrdersPageQueryDTO ordersPageQueryDTO);
 }
