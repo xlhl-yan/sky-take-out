@@ -3,6 +3,7 @@ package com.xlhl.sky.controller.admin;
 import com.xlhl.sky.result.Result;
 import com.xlhl.sky.service.admin.ReportService;
 import com.xlhl.sky.vo.OrderReportVO;
+import com.xlhl.sky.vo.SalesTop10ReportVO;
 import com.xlhl.sky.vo.TurnoverReportVO;
 import com.xlhl.sky.vo.UserReportVO;
 import io.swagger.annotations.Api;
@@ -28,6 +29,26 @@ public class ReportController {
     @Resource(name = "reportServiceImpl")
     private ReportService reportService;
 
+
+    /**
+     * 查询指定时间段的销量排名top10
+     *
+     * @param begin 开始日期
+     * @param end   结束日期
+     * @return 销量top10
+     */
+    @GetMapping("/top10")
+    @ApiOperation(value = "查询指定时间段的销量排名top10")
+    public Result<SalesTop10ReportVO> top10(
+            //时间格式转换
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+
+        log.info("查询销量排名top10。。。");
+        SalesTop10ReportVO salesTop10ReportVO = reportService.getSalesTop10(begin, end);
+
+        return Result.success(salesTop10ReportVO);
+    }
 
     /**
      * 指定时间订单统计

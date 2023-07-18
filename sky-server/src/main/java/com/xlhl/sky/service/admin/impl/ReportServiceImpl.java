@@ -1,12 +1,15 @@
 package com.xlhl.sky.service.admin.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xlhl.sky.dto.GoodsSalesDTO;
 import com.xlhl.sky.entity.Orders;
 import com.xlhl.sky.entity.User;
 import com.xlhl.sky.mapper.user.UserMapper;
+import com.xlhl.sky.mapper.user.UserOrderDetailMapper;
 import com.xlhl.sky.mapper.user.UserOrderMapper;
 import com.xlhl.sky.service.admin.ReportService;
 import com.xlhl.sky.vo.OrderReportVO;
+import com.xlhl.sky.vo.SalesTop10ReportVO;
 import com.xlhl.sky.vo.TurnoverReportVO;
 import com.xlhl.sky.vo.UserReportVO;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -32,6 +36,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private UserOrderDetailMapper orderDetailMapper;
 
 
     /**
@@ -157,6 +164,8 @@ public class ReportServiceImpl implements ReportService {
             wrapper.eq("status", Orders.COMPLETED);
             Long validOrder = orderMapper.selectCount(wrapper);
             validOrders.add(validOrder);
+
+            wrapper.clear();
         });
 
         //计算时间区间全部的订单数量 lambda求和
@@ -165,8 +174,8 @@ public class ReportServiceImpl implements ReportService {
         long validOrdersCount = validOrders.stream().reduce(Long::sum).get();
 
         double orderCompletionRate = 0d;
-        if (totalOrderCount != 0L && validOrdersCount != 0L) {
-            orderCompletionRate = (double) totalOrderCount / totalOrderCount;
+        if (totalOrderCount != 0L) {
+            orderCompletionRate = (double) validOrdersCount / totalOrderCount;
         }
         //计算时间区间内全部的有效订单数量
         return OrderReportVO.builder()
@@ -177,11 +186,48 @@ public class ReportServiceImpl implements ReportService {
                 //时间段
                 .dateList(StringUtils.join(dateTimes, ","))
                 //时间段内全部订单
-                .validOrderCount(Math.toIntExact(totalOrderCount))
+                .validOrderCount(Math.toIntExact(validOrdersCount))
                 //时间段有效订单数量
-                .totalOrderCount(Math.toIntExact(validOrdersCount))
+                .totalOrderCount(Math.toIntExact(totalOrderCount))
                 //订单完成效率
                 .orderCompletionRate(orderCompletionRate)
+                .build();
+    }
+
+    /**
+     * 查询指定时间段的销量排名top10
+     *
+     * @param begin 开始日期
+     * @param end   结束日期
+     * @return 销量top10
+     */
+    @Override
+    public SalesTop10ReportVO getSalesTop10(LocalDate begin, LocalDate end) {
+
+
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);//当天的开始
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);//当天的结束
+        /**
+         * SELECT od.name,SUM(od.number) FROM orders o JOIN orders_detail od
+         * WHERE od.order_id = o.id AND o.status = 5 AND o.order_time < ? AND o.order_time > ?
+         * GROUP BY od.name ORDER BY number DESC LIMIT 0,10
+         */
+
+
+        List<GoodsSalesDTO> goodsSalesList = orderMapper.getSalesTop10(beginTime, endTime);
+
+
+        List<String> nameList = goodsSalesList.stream()
+                .map(GoodsSalesDTO::getName)
+                .collect(Collectors.toList());
+
+        List<Integer> numberList = goodsSalesList.stream()
+                .map(GoodsSalesDTO::getNumber)
+                .collect(Collectors.toList());
+
+        return SalesTop10ReportVO.builder()
+                .nameList(StringUtils.join(nameList, ","))
+                .numberList(StringUtils.join(numberList, ","))
                 .build();
     }
 
