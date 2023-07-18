@@ -1,4 +1,4 @@
-package com.xlhl.sky.mapper.admin;
+package com.xlhl.sky.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.pagehelper.Page;
@@ -18,7 +18,6 @@ import java.util.Map;
 @Repository
 @Mapper
 public interface DishMapper extends BaseMapper<Dish> {
-
 
     /**
      * 根据条件统计菜品数量

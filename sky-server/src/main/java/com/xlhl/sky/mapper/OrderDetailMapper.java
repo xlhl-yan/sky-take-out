@@ -1,4 +1,4 @@
-package com.xlhl.sky.mapper.user;
+package com.xlhl.sky.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xlhl.sky.entity.OrderDetail;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 @Mapper
-public interface UserOrderDetailMapper extends BaseMapper<OrderDetail> {
+public interface OrderDetailMapper extends BaseMapper<OrderDetail> {
     /**
      * 批量插入订单信息数据
      *

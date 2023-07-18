@@ -2,7 +2,7 @@ package com.xlhl.sky.service.user.impl;
 
 import com.xlhl.sky.context.BaseContext;
 import com.xlhl.sky.entity.AddressBook;
-import com.xlhl.sky.mapper.user.UserAddressBookMapper;
+import com.xlhl.sky.mapper.AddressBookMapper;
 import com.xlhl.sky.service.user.UserAddressBookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,8 +14,8 @@ import java.util.List;
 @Service
 @Slf4j
 public class UserAddressBookServiceImpl implements UserAddressBookService {
-    @Resource(name = "userAddressBookMapper")
-    private UserAddressBookMapper addressBookMapper;
+    @Resource(name = "addressBookMapper")
+    private AddressBookMapper addressBookMapper;
 
     /**
      * 条件查询

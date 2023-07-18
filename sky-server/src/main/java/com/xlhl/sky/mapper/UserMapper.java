@@ -1,4 +1,4 @@
-package com.xlhl.sky.mapper.user;
+package com.xlhl.sky.mapper;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

@@ -5,7 +5,7 @@ import com.xlhl.sky.constant.MessageConstant;
 import com.xlhl.sky.dto.UserLoginDTO;
 import com.xlhl.sky.entity.User;
 import com.xlhl.sky.exception.LoginFailedException;
-import com.xlhl.sky.mapper.user.UserMapper;
+import com.xlhl.sky.mapper.UserMapper;
 import com.xlhl.sky.properties.WeChatProperties;
 import com.xlhl.sky.service.user.UserService;
 import com.xlhl.sky.utils.HttpClientUtil;

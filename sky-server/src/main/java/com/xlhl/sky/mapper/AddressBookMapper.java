@@ -1,4 +1,4 @@
-package com.xlhl.sky.mapper.user;
+package com.xlhl.sky.mapper;
 
 import com.xlhl.sky.entity.AddressBook;
 import org.apache.ibatis.annotations.*;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface UserAddressBookMapper {
+public interface AddressBookMapper {
 
     /**
      * 条件查询

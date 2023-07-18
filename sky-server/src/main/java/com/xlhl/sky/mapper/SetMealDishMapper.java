@@ -1,4 +1,4 @@
-package com.xlhl.sky.mapper.admin;
+package com.xlhl.sky.mapper;
 
 import com.xlhl.sky.entity.SetMealDish;
 import org.apache.ibatis.annotations.Mapper;

@@ -5,9 +5,9 @@ import com.xlhl.sky.dto.ShoppingCartDTO;
 import com.xlhl.sky.entity.Dish;
 import com.xlhl.sky.entity.SetMeal;
 import com.xlhl.sky.entity.ShoppingCart;
-import com.xlhl.sky.mapper.admin.DishMapper;
-import com.xlhl.sky.mapper.admin.SetMealMapper;
-import com.xlhl.sky.mapper.user.UserShoppingCartMapper;
+import com.xlhl.sky.mapper.DishMapper;
+import com.xlhl.sky.mapper.SetMealMapper;
+import com.xlhl.sky.mapper.ShoppingCartMapper;
 import com.xlhl.sky.service.user.UserShoppingCartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -21,8 +21,8 @@ import java.util.List;
 @Slf4j
 public class UserShoppingCartServiceImpl implements UserShoppingCartService {
 
-    @Resource(name = "userShoppingCartMapper")
-    private UserShoppingCartMapper userShoppingCartMapper;
+    @Resource(name = "shoppingCartMapper")
+    private ShoppingCartMapper userShoppingCartMapper;
 
     @Resource(name = "dishMapper")
     private DishMapper dishMapper;

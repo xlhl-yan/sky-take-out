@@ -2,8 +2,7 @@ package com.xlhl.sky.task;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xlhl.sky.entity.Orders;
-import com.xlhl.sky.mapper.user.UserOrderDetailMapper;
-import com.xlhl.sky.mapper.user.UserOrderMapper;
+import com.xlhl.sky.mapper.OrderMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -17,10 +16,8 @@ import java.util.List;
 public class CleanOrderTask {
 
     @Resource
-    private UserOrderMapper userOrderMapper;
+    private OrderMapper userOrderMapper;
 
-    @Resource
-    private UserOrderDetailMapper userOrderDetailMapper;
 
     private QueryWrapper<Orders> wrapper = new QueryWrapper<>();
 /*

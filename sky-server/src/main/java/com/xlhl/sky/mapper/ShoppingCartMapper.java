@@ -1,4 +1,4 @@
-package com.xlhl.sky.mapper.user;
+package com.xlhl.sky.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xlhl.sky.entity.ShoppingCart;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface UserShoppingCartMapper extends BaseMapper<ShoppingCart> {
+public interface ShoppingCartMapper extends BaseMapper<ShoppingCart> {
     /**
      * 条件查询购物车
      *

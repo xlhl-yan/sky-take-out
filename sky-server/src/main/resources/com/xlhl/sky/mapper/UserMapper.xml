@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.xlhl.sky.mapper.user.UserMapper">
+<mapper namespace="com.xlhl.sky.mapper.UserMapper">
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO USER (OPENID, NAME, PHONE, SEX, ID_NUMBER, AVATAR, CREATE_TIME)
         VALUES (#{openid}, #{name}, #{phone}, #{sex}, #{idNumber}, #{avatar}, #{createTime})

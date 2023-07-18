@@ -1,4 +1,4 @@
-package com.xlhl.sky.mapper.user;
+package com.xlhl.sky.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.pagehelper.Page;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Repository
 @Mapper
-public interface UserOrderMapper extends BaseMapper<Orders> {
+public interface OrderMapper extends BaseMapper<Orders> {
 
     /**
      * 根据订单号查询订单
@@ -49,4 +49,6 @@ public interface UserOrderMapper extends BaseMapper<Orders> {
      * @return 销量top10
      */
     List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin, LocalDateTime end);
+
+    Integer countByMap(Map map);
 }

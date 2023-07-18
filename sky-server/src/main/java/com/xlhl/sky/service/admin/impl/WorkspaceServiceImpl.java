@@ -2,10 +2,10 @@ package com.xlhl.sky.service.admin.impl;
 
 import com.xlhl.sky.constant.StatusConstant;
 import com.xlhl.sky.entity.Orders;
-import com.xlhl.sky.mapper.admin.DishMapper;
-import com.xlhl.sky.mapper.admin.OrderMapper;
-import com.xlhl.sky.mapper.admin.SetMealMapper;
-import com.xlhl.sky.mapper.user.UserMapper;
+import com.xlhl.sky.mapper.DishMapper;
+import com.xlhl.sky.mapper.SetMealMapper;
+import com.xlhl.sky.mapper.UserMapper;
+import com.xlhl.sky.mapper.OrderMapper;
 import com.xlhl.sky.service.admin.WorkspaceService;
 import com.xlhl.sky.vo.BusinessDataVO;
 import com.xlhl.sky.vo.DishOverViewVO;
@@ -38,7 +38,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     /**
      * 根据时间段统计营业数据
-     *
      * @param begin
      * @param end
      * @return
@@ -53,8 +52,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
          */
 
         Map map = new HashMap();
-        map.put("begin", begin);
-        map.put("end", end);
+        map.put("begin",begin);
+        map.put("end",end);
 
         //查询总订单数
         Integer totalOrderCount = orderMapper.countByMap(map);
@@ -62,7 +61,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         map.put("status", Orders.COMPLETED);
         //营业额
         Double turnover = orderMapper.sumByMap(map);
-        turnover = turnover == null ? 0.0 : turnover;
+        turnover = turnover == null? 0.0 : turnover;
 
         //有效订单数
         Integer validOrderCount = orderMapper.countByMap(map);
@@ -70,7 +69,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         Double unitPrice = 0.0;
 
         Double orderCompletionRate = 0.0;
-        if (totalOrderCount != 0 && validOrderCount != 0) {
+        if(totalOrderCount != 0 && validOrderCount != 0){
             //订单完成率
             orderCompletionRate = validOrderCount.doubleValue() / totalOrderCount;
             //平均客单价
@@ -96,7 +95,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
      * @return
      */
     public OrderOverViewVO getOrderOverView() {
-        Map<String, Object> map = new HashMap<>();
+        Map map = new HashMap();
         map.put("begin", LocalDateTime.now().with(LocalTime.MIN));
         map.put("status", Orders.TO_BE_CONFIRMED);
 

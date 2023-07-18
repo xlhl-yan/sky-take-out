@@ -26,7 +26,7 @@ import java.time.LocalTime;
 @Api(tags = "工作台相关接口")
 public class WorkSpaceController {
 
-    @Resource(name = "workspaceServiceImpl")
+    @Resource
     private WorkspaceService workspaceService;
 
     /**
@@ -71,7 +71,7 @@ public class WorkSpaceController {
      */
     @GetMapping("/overviewSetmeals")
     @ApiOperation("查询套餐总览")
-    public Result<SetMealOverViewVO> setMealOverView(){
+    public Result<SetMealOverViewVO> setmealOverView(){
         return Result.success(workspaceService.getSetmealOverView());
     }
 }

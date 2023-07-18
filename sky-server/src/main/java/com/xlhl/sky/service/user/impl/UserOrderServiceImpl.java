@@ -16,7 +16,7 @@ import com.xlhl.sky.entity.*;
 import com.xlhl.sky.exception.AddressBookBusinessException;
 import com.xlhl.sky.exception.OrderBusinessException;
 import com.xlhl.sky.exception.ShoppingCartBusinessException;
-import com.xlhl.sky.mapper.user.*;
+import com.xlhl.sky.mapper.*;
 import com.xlhl.sky.result.PageResult;
 import com.xlhl.sky.service.user.UserOrderService;
 import com.xlhl.sky.utils.WeChatPayUtil;
@@ -41,16 +41,16 @@ import java.util.List;
 public class UserOrderServiceImpl implements UserOrderService {
 
     @Resource
-    private UserOrderMapper orderMapper;
+    private OrderMapper orderMapper;
 
     @Resource
-    private UserOrderDetailMapper orderDetailMapper;
+    private OrderDetailMapper orderDetailMapper;
 
     @Resource
-    private UserShoppingCartMapper shoppingCartMapper;
+    private ShoppingCartMapper shoppingCartMapper;
 
     @Resource
-    private UserAddressBookMapper addressBookMapper;
+    private AddressBookMapper addressBookMapper;
 
     @Resource
     private UserMapper userMapper;

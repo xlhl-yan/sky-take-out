@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xlhl.sky.dto.GoodsSalesDTO;
 import com.xlhl.sky.entity.Orders;
 import com.xlhl.sky.entity.User;
-import com.xlhl.sky.mapper.user.UserMapper;
-import com.xlhl.sky.mapper.user.UserOrderDetailMapper;
-import com.xlhl.sky.mapper.user.UserOrderMapper;
+import com.xlhl.sky.mapper.UserMapper;
+import com.xlhl.sky.mapper.OrderDetailMapper;
+import com.xlhl.sky.mapper.OrderMapper;
 import com.xlhl.sky.service.admin.ReportService;
 import com.xlhl.sky.vo.OrderReportVO;
 import com.xlhl.sky.vo.SalesTop10ReportVO;
@@ -32,13 +32,13 @@ import java.util.stream.Collectors;
 public class ReportServiceImpl implements ReportService {
 
     @Resource
-    private UserOrderMapper orderMapper;
+    private OrderMapper orderMapper;
 
     @Resource
     private UserMapper userMapper;
 
     @Resource
-    private UserOrderDetailMapper orderDetailMapper;
+    private OrderDetailMapper orderDetailMapper;
 
 
     /**
