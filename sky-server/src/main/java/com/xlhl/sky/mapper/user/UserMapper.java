@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Map;
+
 @Mapper
 @Repository
 public interface UserMapper extends BaseMapper<User> {
@@ -25,4 +27,12 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     Integer insertUser(User user);
+
+    /**
+     * 根据时间段查询用户数量
+     *
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
 }

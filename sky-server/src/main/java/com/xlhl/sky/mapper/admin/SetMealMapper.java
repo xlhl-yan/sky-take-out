@@ -12,10 +12,19 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
 public interface SetMealMapper extends BaseMapper<SetMeal> {
+
+    /**
+     * 根据条件统计套餐数量
+     *
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
 
     /**
      * 动态条件查询套餐

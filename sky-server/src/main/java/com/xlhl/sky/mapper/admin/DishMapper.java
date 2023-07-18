@@ -13,10 +13,20 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @Mapper
 public interface DishMapper extends BaseMapper<Dish> {
+
+
+    /**
+     * 根据条件统计菜品数量
+     *
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
 
     /**
      * 根据分类id查询菜品数量

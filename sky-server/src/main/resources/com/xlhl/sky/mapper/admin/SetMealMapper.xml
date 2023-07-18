@@ -2,6 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xlhl.sky.mapper.admin.SetMealMapper">
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(id) from setmeal
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+        </where>
+    </select>
+
     <insert id="addSetMeal">
         INSERT INTO SETMEAL (CATEGORY_ID, NAME, PRICE, DESCRIPTION, IMAGE, CREATE_TIME, UPDATE_TIME, CREATE_USER,
                              UPDATE_USER)
