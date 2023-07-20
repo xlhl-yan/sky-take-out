@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDate;
 
 /**
@@ -29,6 +31,22 @@ public class ReportController {
     @Resource(name = "reportServiceImpl")
     private ReportService reportService;
 
+
+    /**
+     * 导出运营数据excel报表
+     *
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @GetMapping("/export")
+    @ApiOperation(value = "导出数据excel报表")
+    public Result export(HttpServletResponse response){
+        log.info("正在导出近30日内 Excel报表");
+
+        reportService.exportExcel(response);
+        return Result.success("OK");
+    }
 
     /**
      * 查询指定时间段的销量排名top10

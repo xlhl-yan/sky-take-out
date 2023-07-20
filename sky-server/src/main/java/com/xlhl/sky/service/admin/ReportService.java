@@ -6,6 +6,8 @@ import com.xlhl.sky.vo.SalesTop10ReportVO;
 import com.xlhl.sky.vo.TurnoverReportVO;
 import com.xlhl.sky.vo.UserReportVO;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDate;
 
 public interface ReportService {
@@ -44,4 +46,14 @@ public interface ReportService {
      * @return 销量top10
      */
     SalesTop10ReportVO getSalesTop10(LocalDate begin, LocalDate end);
+
+    /**
+     * 导出运营数据excel报表
+     *
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    void exportExcel(HttpServletResponse response);
+
 }

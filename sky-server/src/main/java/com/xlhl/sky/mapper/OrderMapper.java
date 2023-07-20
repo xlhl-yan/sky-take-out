@@ -51,4 +51,7 @@ public interface OrderMapper extends BaseMapper<Orders> {
     List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin, LocalDateTime end);
 
     Integer countByMap(Map map);
+
+
+    Page<Orders> queryPageOrder(OrdersPageQueryDTO ordersPageQueryDTO);
 }
